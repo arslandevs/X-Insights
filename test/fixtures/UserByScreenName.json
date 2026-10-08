@@ -1,0 +1,60 @@
+{
+ "data": {
+  "user": {
+   "result": {
+    "__typename": "User",
+    "avatar": {
+     "image_url": "https://pbs.twimg.com/profile_images/2077111020305162240/PwddgOau_normal.jpg"
+    },
+    "core": {
+     "created_at": "Mon Jul 08 09:31:59 +0000 2013",
+     "name": "@levelsio",
+     "screen_name": "levelsio"
+    },
+    "id": "VXNlcjoxNTc3MjQxNDAz",
+    "is_blue_verified": true,
+    "pinned_items": {
+     "tweet_ids_str": [
+      "2107815963269685485"
+     ]
+    },
+    "possibly_sensitive": false,
+    "privacy": {
+     "protected": false
+    },
+    "profile_bio": {
+     "description": "\ud83d\udcb8https://t.co/sQ0aiU7v02\n\ud83d\udcf8https://t.co/lAyoqmSBRX $86K/m\n\ud83c\udfaehttps://t.co/tF49atJ396 $44K/m\n\ud83e\udedfhttps://t.co/8rYr9A594z $26K/m\n\ud83c\udfe1https://t.co/1oqUgfD6CZ $21K/m\n\ud83d\udc59@X $17K/m\n\ud83c\udf0dhttps://t.co/UXK5AFqCaQ $12K/m\n\ud83c\udfe9https://t.co/4p4dzTDVN6 $6K/m",
+     "entities": {
+      "url": {
+       "urls": [
+        {
+         "url": "https://t.co/6RM0RsUXfe"
+        }
+       ]
+      }
+     }
+    },
+    "relationship_counts": {
+     "followers": 971353,
+     "following": 3268
+    },
+    "relationship_perspectives": {
+     "blocked_by": false,
+     "blocking": false,
+     "followed_by": false,
+     "following": true,
+     "live_following": false,
+     "muting": false
+    },
+    "rest_id": "1577241403",
+    "tweet_counts": {
+     "media_tweets": 19807,
+     "tweets": 181188
+    },
+    "verification": {
+     "verified": false
+    }
+   }
+  }
+ }
+}

@@ -1,0 +1,856 @@
+{
+ "data": {
+  "user": {
+   "result": {
+    "__typename": "User",
+    "timeline": {
+     "timeline": {
+      "instructions": [
+       {
+        "entries": [
+         {
+          "content": {
+           "__typename": "TimelineTimelineItem",
+           "clientEventInfo": {
+            "component": "organic_tweets",
+            "element": "tweet"
+           },
+           "entryType": "TimelineTimelineItem",
+           "itemContent": {
+            "__typename": "TimelineTweet",
+            "itemType": "TimelineTweet",
+            "tweetDisplayType": "Tweet",
+            "tweet_results": {
+             "result": {
+              "__typename": "Tweet",
+              "core": {
+               "user_results": {
+                "result": {
+                 "__typename": "User",
+                 "avatar": {
+                  "image_url": "https://pbs.twimg.com/profile_images/2077111020305162240/PwddgOau_normal.jpg"
+                 },
+                 "core": {
+                  "created_at": "Mon Jul 08 09:31:59 +0000 2013",
+                  "name": "@levelsio",
+                  "screen_name": "levelsio"
+                 },
+                 "id": "VXNlcjoxNTc3MjQxNDAz",
+                 "is_blue_verified": true,
+                 "pinned_items": {
+                  "tweet_ids_str": [
+                   "2107815963269685485"
+                  ]
+                 },
+                 "possibly_sensitive": false,
+                 "privacy": {
+                  "protected": false
+                 },
+                 "profile_bio": {
+                  "description": "\ud83d\udcb8https://t.co/sQ0aiU7v02\n\ud83d\udcf8https://t.co/lAyoqmSBRX $86K/m\n\ud83c\udfaehttps://t.co/tF49atJ396 $44K/m\n\ud83e\udedfhttps://t.co/8rYr9A594z $26K/m\n\ud83c\udfe1https://t.co/1oqUgfD6CZ $21K/m\n\ud83d\udc59@X $17K/m\n\ud83c\udf0dhttps://t.co/UXK5AFqCaQ $12K/m\n\ud83c\udfe9https://t.co/4p4dzTDVN6 $6K/m",
+                  "entities": {
+                   "url": {
+                    "urls": [
+                     {
+                      "url": "https://t.co/6RM0RsUXfe"
+                     }
+                    ]
+                   }
+                  }
+                 },
+                 "relationship_counts": {
+                  "followers": 971353,
+                  "following": 3268
+                 },
+                 "relationship_perspectives": {
+                  "blocked_by": false,
+                  "blocking": false,
+                  "followed_by": false,
+                  "following": true,
+                  "live_following": false,
+                  "muting": false
+                 },
+                 "rest_id": "1577241403",
+                 "tweet_counts": {
+                  "media_tweets": 19807,
+                  "tweets": 181188
+                 },
+                 "verification": {
+                  "verified": false
+                 }
+                }
+               }
+              },
+              "legacy": {
+               "bookmark_count": 40,
+               "conversation_id_str": "2108229289472606692",
+               "created_at": "Thu Oct 08 16:13:26 +0000 2026",
+               "entities": {
+                "media": [
+                 {
+                  "id_str": "2108229242492268544",
+                  "media_key": "3_2108229242492268544",
+                  "media_url_https": "https://pbs.twimg.com/media/HUHvU3_XsAAII9D.jpg",
+                  "type": "photo",
+                  "url": "https://t.co/RdXTXvEZwA"
+                 },
+                 {
+                  "id_str": "2108229242987089923",
+                  "media_key": "3_2108229242987089923",
+                  "media_url_https": "https://pbs.twimg.com/media/HUHvU51WEAM0Z8O.jpg",
+                  "type": "photo",
+                  "url": "https://t.co/RdXTXvEZwA"
+                 },
+                 {
+                  "id_str": "2108229242479583232",
+                  "media_key": "13_2108229242479583232",
+                  "media_url_https": "https://pbs.twimg.com/amplify_video_thumb/2108229242479583232/img/VRB2ZDw6J650D3ej.jpg",
+                  "type": "video",
+                  "url": "https://t.co/RdXTXvEZwA"
+                 }
+                ]
+               },
+               "extended_entities": {
+                "media": [
+                 {
+                  "id_str": "2108229242492268544",
+                  "media_key": "3_2108229242492268544",
+                  "media_url_https": "https://pbs.twimg.com/media/HUHvU3_XsAAII9D.jpg",
+                  "type": "photo",
+                  "url": "https://t.co/RdXTXvEZwA"
+                 },
+                 {
+                  "id_str": "2108229242987089923",
+                  "media_key": "3_2108229242987089923",
+                  "media_url_https": "https://pbs.twimg.com/media/HUHvU51WEAM0Z8O.jpg",
+                  "type": "photo",
+                  "url": "https://t.co/RdXTXvEZwA"
+                 },
+                 {
+                  "id_str": "2108229242479583232",
+                  "media_key": "13_2108229242479583232",
+                  "media_url_https": "https://pbs.twimg.com/amplify_video_thumb/2108229242479583232/img/VRB2ZDw6J650D3ej.jpg",
+                  "type": "video",
+                  "url": "https://t.co/RdXTXvEZwA"
+                 }
+                ]
+               },
+               "favorite_count": 155,
+               "full_text": "Last night's impromptu Urban Terror LAN-party at our coworking day\n\nThis is why the web is so good for multiplayer gaming\n\nWithout it we'd have get 10+ people to download the same game on 3 different platforms (MacOS, Windows and Linux)\n\nInstead I just told everyone to open https://t.co/RdXTXvEZwA",
+               "id_str": "2108229289472606692",
+               "is_quote_status": true,
+               "lang": "en",
+               "possibly_sensitive": false,
+               "quote_count": 3,
+               "quoted_status_id_str": "2107489244235071718",
+               "quoted_status_permalink": {
+                "display": "x.com/levelsio/statu\u2026",
+                "expanded": "https://twitter.com/levelsio/status/2107489244235071718",
+                "url": "https://t.co/fLZx505GhK"
+               },
+               "reply_count": 29,
+               "retweet_count": 2,
+               "user_id_str": "1577241403"
+              },
+              "note_tweet": {
+               "is_expandable": true,
+               "note_tweet_results": {
+                "result": {
+                 "entity_set": {
+                  "smarttags": [],
+                  "urls": [
+                   {
+                    "url": "https://t.co/MohU4A8Zel"
+                   }
+                  ],
+                  "user_mentions": []
+                 },
+                 "id": "Tm90ZVR3ZWV0OjIxMDgyMjkyODk0MDEzNjAzODQ=",
+                 "text": "Last night's impromptu Urban Terror LAN-party at our coworking day\n\nThis is why the web is so good for multiplayer gaming\n\nWithout it we'd have get 10+ people to download the same game on 3 different platforms (MacOS, Windows and Linux)\n\nInstead I just told everyone to open https://t.co/MohU4A8Zel in their browser and everyone instantly started playing together\n\nSuperfun \ud83d\ude0a\ud83d\ude0a\ud83d\ude0a"
+                }
+               }
+              },
+              "quoted_status_result": {
+               "result": {
+                "__typename": "Tweet",
+                "core": {
+                 "user_results": {
+                  "result": {
+                   "__typename": "User",
+                   "avatar": {
+                    "image_url": "https://pbs.twimg.com/profile_images/2077111020305162240/PwddgOau_normal.jpg"
+                   },
+                   "core": {
+                    "created_at": "Mon Jul 08 09:31:59 +0000 2013",
+                    "name": "@levelsio",
+                    "screen_name": "levelsio"
+                   },
+                   "id": "VXNlcjoxNTc3MjQxNDAz",
+                   "is_blue_verified": true,
+                   "pinned_items": {
+                    "tweet_ids_str": [
+                     "2107815963269685485"
+                    ]
+                   },
+                   "possibly_sensitive": false,
+                   "privacy": {
+                    "protected": false
+                   },
+                   "profile_bio": {
+                    "description": "\ud83d\udcb8https://t.co/sQ0aiU7v02\n\ud83d\udcf8https://t.co/lAyoqmSBRX $86K/m\n\ud83c\udfaehttps://t.co/tF49atJ396 $44K/m\n\ud83e\udedfhttps://t.co/8rYr9A594z $26K/m\n\ud83c\udfe1https://t.co/1oqUgfD6CZ $21K/m\n\ud83d\udc59@X $17K/m\n\ud83c\udf0dhttps://t.co/UXK5AFqCaQ $12K/m\n\ud83c\udfe9https://t.co/4p4dzTDVN6 $6K/m",
+                    "entities": {
+                     "url": {
+                      "urls": [
+                       {
+                        "url": "https://t.co/6RM0RsUXfe"
+                       }
+                      ]
+                     }
+                    }
+                   },
+                   "relationship_counts": {
+                    "followers": 971353,
+                    "following": 3268
+                   },
+                   "relationship_perspectives": {
+                    "blocked_by": false,
+                    "blocking": false,
+                    "followed_by": false,
+                    "following": true,
+                    "live_following": false,
+                    "muting": false
+                   },
+                   "rest_id": "1577241403",
+                   "tweet_counts": {
+                    "media_tweets": 19807,
+                    "tweets": 181188
+                   },
+                   "verification": {
+                    "verified": false
+                   }
+                  }
+                 }
+                },
+                "legacy": {
+                 "bookmark_count": 67,
+                 "conversation_id_str": "2107489244235071718",
+                 "created_at": "Tue Oct 06 15:12:45 +0000 2026",
+                 "entities": {
+                  "media": [
+                   {
+                    "id_str": "2107488313657434112",
+                    "media_key": "13_2107488313657434112",
+                    "media_url_https": "https://pbs.twimg.com/amplify_video_thumb/2107488313657434112/img/ePUB7B4J5ehK8Mz-.jpg",
+                    "type": "video",
+                    "url": "https://t.co/VEda5BK1WC"
+                   }
+                  ]
+                 },
+                 "extended_entities": {
+                  "media": [
+                   {
+                    "id_str": "2107488313657434112",
+                    "media_key": "13_2107488313657434112",
+                    "media_url_https": "https://pbs.twimg.com/amplify_video_thumb/2107488313657434112/img/ePUB7B4J5ehK8Mz-.jpg",
+                    "type": "video",
+                    "url": "https://t.co/VEda5BK1WC"
+                   }
+                  ]
+                 },
+                 "favorite_count": 208,
+                 "full_text": "\ud83c\uddf5\ud83c\uddf9 I tried to make an Urban Terror map of Lisbon with Opus 5.5 and it worked!\n\nIt uses the real OSM maps data of the center area around Pra\u00e7a do Com\u00e9rcio with real buildings\n\nIt's not fully exact but a nice approximation, I've always wanted to be able to to multiplayer games in https://t.co/VEda5BK1WC",
+                 "id_str": "2107489244235071718",
+                 "is_quote_status": true,
+                 "lang": "en",
+                 "possibly_sensitive": false,
+                 "quote_count": 3,
+                 "quoted_status_id_str": "2106150888289009666",
+                 "quoted_status_permalink": {
+                  "display": "x.com/levelsio/statu\u2026",
+                  "expanded": "https://twitter.com/levelsio/status/2106150888289009666",
+                  "url": "https://t.co/0nA3H9oLzq"
+                 },
+                 "reply_count": 48,
+                 "retweet_count": 4,
+                 "user_id_str": "1577241403"
+                },
+                "nested_quoted_tweet_results": {
+                 "result": {
+                  "__typename": "Tweet",
+                  "core": {
+                   "user_results": {
+                    "result": {
+                     "__typename": "User",
+                     "avatar": {
+                      "image_url": "https://pbs.twimg.com/profile_images/2077111020305162240/PwddgOau_normal.jpg"
+                     },
+                     "core": {
+                      "created_at": "Mon Jul 08 09:31:59 +0000 2013",
+                      "name": "@levelsio",
+                      "screen_name": "levelsio"
+                     },
+                     "id": "VXNlcjoxNTc3MjQxNDAz",
+                     "is_blue_verified": true,
+                     "pinned_items": {
+                      "tweet_ids_str": [
+                       "2107815963269685485"
+                      ]
+                     },
+                     "possibly_sensitive": false,
+                     "privacy": {
+                      "protected": false
+                     },
+                     "profile_bio": {
+                      "description": "\ud83d\udcb8https://t.co/sQ0aiU7v02\n\ud83d\udcf8https://t.co/lAyoqmSBRX $86K/m\n\ud83c\udfaehttps://t.co/tF49atJ396 $44K/m\n\ud83e\udedfhttps://t.co/8rYr9A594z $26K/m\n\ud83c\udfe1https://t.co/1oqUgfD6CZ $21K/m\n\ud83d\udc59@X $17K/m\n\ud83c\udf0dhttps://t.co/UXK5AFqCaQ $12K/m\n\ud83c\udfe9https://t.co/4p4dzTDVN6 $6K/m",
+                      "entities": {
+                       "url": {
+                        "urls": [
+                         {
+                          "url": "https://t.co/6RM0RsUXfe"
+                         }
+                        ]
+                       }
+                      }
+                     },
+                     "relationship_counts": {
+                      "followers": 971353,
+                      "following": 3268
+                     },
+                     "relationship_perspectives": {
+                      "blocked_by": false,
+                      "blocking": false,
+                      "followed_by": false,
+                      "following": true,
+                      "live_following": false,
+                      "muting": false
+                     },
+                     "rest_id": "1577241403",
+                     "tweet_counts": {
+                      "media_tweets": 19807,
+                      "tweets": 181188
+                     },
+                     "verification": {
+                      "verified": false
+                     }
+                    }
+                   }
+                  },
+                  "legacy": {
+                   "bookmark_count": 221,
+                   "conversation_id_str": "2106150888289009666",
+                   "created_at": "Fri Oct 02 22:34:36 +0000 2026",
+                   "entities": {
+                    "media": [
+                     {
+                      "id_str": "2106150488139763712",
+                      "media_key": "13_2106150488139763712",
+                      "media_url_https": "https://pbs.twimg.com/amplify_video_thumb/2106150488139763712/img/kEoZu8UI1iSYnflJ.jpg",
+                      "type": "video",
+                      "url": "https://t.co/OUIPvqGQEr"
+                     }
+                    ],
+                    "urls": [
+                     {
+                      "url": "https://t.co/jDt6vrC20X"
+                     }
+                    ],
+                    "user_mentions": [
+                     {
+                      "id_str": "1091966401336623105",
+                      "name": "Erwin",
+                      "screen_name": "Erwin_AI"
+                     }
+                    ]
+                   },
+                   "extended_entities": {
+                    "media": [
+                     {
+                      "id_str": "2106150488139763712",
+                      "media_key": "13_2106150488139763712",
+                      "media_url_https": "https://pbs.twimg.com/amplify_video_thumb/2106150488139763712/img/kEoZu8UI1iSYnflJ.jpg",
+                      "type": "video",
+                      "url": "https://t.co/OUIPvqGQEr"
+                     }
+                    ]
+                   },
+                   "favorite_count": 471,
+                   "full_text": "I keep going more niche with reverse engineered web-based versions of games\n\n\ud83d\udc49 https://t.co/jDt6vrC20X \ud83d\udc48\n\n6 months ago I tried to reverse engineer Urban Terror\n\nUrban Terror was kind of a Counter-Strike style mod on top of the Quake 3 Arena engine, I think @Erwin_AI got me to https://t.co/OUIPvqGQEr",
+                   "id_str": "2106150888289009666",
+                   "is_quote_status": false,
+                   "lang": "en",
+                   "possibly_sensitive": false,
+                   "quote_count": 12,
+                   "reply_count": 122,
+                   "retweet_count": 11,
+                   "user_id_str": "1577241403"
+                  },
+                  "note_tweet": {
+                   "is_expandable": true,
+                   "note_tweet_results": {
+                    "result": {
+                     "entity_set": {
+                      "smarttags": [],
+                      "timestamps": [],
+                      "urls": [
+                       {
+                        "url": "https://t.co/MohU4A8Zel"
+                       },
+                       {
+                        "url": "https://t.co/MohU4A8Zel"
+                       }
+                      ],
+                      "user_mentions": [
+                       {
+                        "id_str": "1091966401336623105",
+                        "name": "Erwin",
+                        "screen_name": "Erwin_AI"
+                       },
+                       {
+                        "id_str": "641633",
+                        "name": "Marc K\u00f6hlbrugge",
+                        "screen_name": "marckohlbrugge"
+                       }
+                      ]
+                     },
+                     "id": "Tm90ZVR3ZWV0OjIxMDYxNTA4ODgwMzcyODk5ODQ=",
+                     "richtext": {
+                      "richtext_tags": []
+                     },
+                     "text": "I keep going more niche with reverse engineered web-based versions of games\n\n\ud83d\udc49 https://t.co/MohU4A8Zel \ud83d\udc48\n\n6 months ago I tried to reverse engineer Urban Terror\n\nUrban Terror was kind of a Counter-Strike style mod on top of the Quake 3 Arena engine, I think @Erwin_AI got me to play this during COVID\n\nBecause it runs on Quake 3's engine like RTCW and Q3 itself, I thought I could just use ioquake3 and WASM to run it on web, then add a multiplayer server and it'd just work...\n\nBut no it didn't, I got stuck 6 months ago, it was buggy and wouldn't work, I kept trying and kinda got it to load but not really play\n\nToday I tried it again with Opus 5.5 and again, I couldn't get it to work, giving up I did a last try with Fable 5.1 on high effort and it after awhile it did figure out the issue!\n\n\"The engine's struct was 4 bytes longer than what UT's bytecode expects, everything after that point (the entity count and the entity list) was read 4 bytes off\"\n\nIt rewrote the bytecode and made it work!\n\nSo now we have another game preserved, running  100% the web via WASM, with a multiplayer server tied to it, so you can play with your friends \ud83d\ude0a\n\nEvery model that comes out makes a bit more things possible and you can just keep trying old things that didn't work before\n\nI see lots of people mod modern games now too which looks very cool too\n\nHere I'm playing it with @marckohlbrugge a few minutes ago! Anyway you can play it with everyone else at https://t.co/MohU4A8Zel now :D"
+                    }
+                   }
+                  },
+                  "rest_id": "2106150888289009666",
+                  "views": {
+                   "count": "106311",
+                   "state": "EnabledWithCount"
+                  }
+                 }
+                },
+                "note_tweet": {
+                 "is_expandable": true,
+                 "note_tweet_results": {
+                  "result": {
+                   "entity_set": {
+                    "smarttags": [],
+                    "timestamps": [],
+                    "urls": [
+                     {
+                      "url": "https://t.co/MohU4A8Zel"
+                     }
+                    ],
+                    "user_mentions": []
+                   },
+                   "id": "Tm90ZVR3ZWV0OjIxMDc0ODkyNDQxNDI3ODA0MTY=",
+                   "richtext": {
+                    "richtext_tags": []
+                   },
+                   "text": "\ud83c\uddf5\ud83c\uddf9 I tried to make an Urban Terror map of Lisbon with Opus 5.5 and it worked!\n\nIt uses the real OSM maps data of the center area around Pra\u00e7a do Com\u00e9rcio with real buildings\n\nIt's not fully exact but a nice approximation, I've always wanted to be able to to multiplayer games in actual REAL cities with friends so now we can\n\nI put it as the main map on https://t.co/MohU4A8Zel now \ud83d\ude0a"
+                  }
+                 }
+                },
+                "quotedRefResult": {
+                 "result": {
+                  "__typename": "Tweet",
+                  "rest_id": "2106150888289009666"
+                 }
+                },
+                "rest_id": "2107489244235071718",
+                "views": {
+                 "count": "59620",
+                 "state": "EnabledWithCount"
+                }
+               }
+              },
+              "rest_id": "2108229289472606692",
+              "views": {
+               "count": "25694",
+               "state": "EnabledWithCount"
+              }
+             }
+            }
+           }
+          },
+          "entryId": "tweet-2108229289472606692",
+          "sortIndex": "2108256834560196607"
+         },
+         {
+          "content": {
+           "__typename": "TimelineTimelineItem",
+           "clientEventInfo": {
+            "component": "organic_tweets",
+            "element": "tweet"
+           },
+           "entryType": "TimelineTimelineItem",
+           "itemContent": {
+            "__typename": "TimelineTweet",
+            "itemType": "TimelineTweet",
+            "tweetDisplayType": "Tweet",
+            "tweet_results": {
+             "result": {
+              "__typename": "TweetWithVisibilityResults",
+              "tweet": {
+               "core": {
+                "user_results": {
+                 "result": {
+                  "__typename": "User",
+                  "avatar": {
+                   "image_url": "https://pbs.twimg.com/profile_images/2077111020305162240/PwddgOau_normal.jpg"
+                  },
+                  "core": {
+                   "created_at": "Mon Jul 08 09:31:59 +0000 2013",
+                   "name": "@levelsio",
+                   "screen_name": "levelsio"
+                  },
+                  "id": "VXNlcjoxNTc3MjQxNDAz",
+                  "is_blue_verified": true,
+                  "pinned_items": {
+                   "tweet_ids_str": [
+                    "2107815963269685485"
+                   ]
+                  },
+                  "possibly_sensitive": false,
+                  "privacy": {
+                   "protected": false
+                  },
+                  "profile_bio": {
+                   "description": "\ud83d\udcb8https://t.co/sQ0aiU7v02\n\ud83d\udcf8https://t.co/lAyoqmSBRX $86K/m\n\ud83c\udfaehttps://t.co/tF49atJ396 $44K/m\n\ud83e\udedfhttps://t.co/8rYr9A594z $26K/m\n\ud83c\udfe1https://t.co/1oqUgfD6CZ $21K/m\n\ud83d\udc59@X $17K/m\n\ud83c\udf0dhttps://t.co/UXK5AFqCaQ $12K/m\n\ud83c\udfe9https://t.co/4p4dzTDVN6 $6K/m",
+                   "entities": {
+                    "url": {
+                     "urls": [
+                      {
+                       "url": "https://t.co/6RM0RsUXfe"
+                      }
+                     ]
+                    }
+                   }
+                  },
+                  "relationship_counts": {
+                   "followers": 971353,
+                   "following": 3268
+                  },
+                  "relationship_perspectives": {
+                   "blocked_by": false,
+                   "blocking": false,
+                   "followed_by": false,
+                   "following": true,
+                   "live_following": false,
+                   "muting": false
+                  },
+                  "rest_id": "1577241403",
+                  "tweet_counts": {
+                   "media_tweets": 19807,
+                   "tweets": 181188
+                  },
+                  "verification": {
+                   "verified": false
+                  }
+                 }
+                }
+               },
+               "legacy": {
+                "bookmark_count": 16,
+                "conversation_control": {
+                 "conversation_owner_results": {
+                  "result": {
+                   "__typename": "User",
+                   "core": {
+                    "screen_name": "levelsio"
+                   }
+                  }
+                 },
+                 "policy": "MyNetwork"
+                },
+                "conversation_id_str": "2108218387474100370",
+                "created_at": "Thu Oct 08 15:30:07 +0000 2026",
+                "entities": {
+                 "media": [
+                  {
+                   "id_str": "2108217508331147264",
+                   "media_key": "13_2108217508331147264",
+                   "media_url_https": "https://pbs.twimg.com/amplify_video_thumb/2108217508331147264/img/PlFBGnK42_AMBGBO.jpg",
+                   "type": "video",
+                   "url": "https://t.co/OBffHeBPvk"
+                  }
+                 ]
+                },
+                "extended_entities": {
+                 "media": [
+                  {
+                   "id_str": "2108217508331147264",
+                   "media_key": "13_2108217508331147264",
+                   "media_url_https": "https://pbs.twimg.com/amplify_video_thumb/2108217508331147264/img/PlFBGnK42_AMBGBO.jpg",
+                   "type": "video",
+                   "url": "https://t.co/OBffHeBPvk"
+                  }
+                 ]
+                },
+                "favorite_count": 64,
+                "full_text": "Today I tried to port DOOM to WASM with multiplayer too\n\nActually it's Odamex, an open source Doom engine for Mac, Windows and Linux, specifically great at Doom multiplayer, because the original Doom had very laggy netcode\n\nBut nobody ever ported Odamex to web yet, so I tried https://t.co/OBffHeBPvk",
+                "id_str": "2108218387474100370",
+                "is_quote_status": true,
+                "lang": "en",
+                "possibly_sensitive": false,
+                "quote_count": 1,
+                "quoted_status_id_str": "2107815963269685485",
+                "quoted_status_permalink": {
+                 "display": "x.com/levelsio/statu\u2026",
+                 "expanded": "https://twitter.com/levelsio/status/2107815963269685485",
+                 "url": "https://t.co/XHMTcZsMid"
+                },
+                "reply_count": 9,
+                "retweet_count": 3,
+                "user_id_str": "1577241403"
+               },
+               "note_tweet": {
+                "is_expandable": true,
+                "note_tweet_results": {
+                 "result": {
+                  "entity_set": {
+                   "smarttags": [],
+                   "timestamps": [],
+                   "urls": [
+                    {
+                     "url": "https://t.co/1blGn125P1"
+                    }
+                   ],
+                   "user_mentions": []
+                  },
+                  "id": "Tm90ZVR3ZWV0OjIxMDgyMTgzODczMTg5MDI3ODQ=",
+                  "richtext": {
+                   "richtext_tags": []
+                  },
+                  "text": "Today I tried to port DOOM to WASM with multiplayer too\n\nActually it's Odamex, an open source Doom engine for Mac, Windows and Linux, specifically great at Doom multiplayer, because the original Doom had very laggy netcode\n\nBut nobody ever ported Odamex to web yet, so I tried today with Opus 5.5, and I got it working with in 30 minutes\n\nI also made Opus 5.5 create bots from scratch which it also did in just 10 minutes\n\nIt's the free shareware maps and some of the best community made DOOM map collections like Dystopia 3 and Dwango5 (I had to Google that too but apparently those are the best!)\n\nhttps://t.co/1blGn125P1"
+                 }
+                }
+               },
+               "quoted_status_result": {
+                "result": {
+                 "__typename": "Tweet",
+                 "core": {
+                  "user_results": {
+                   "result": {
+                    "__typename": "User",
+                    "avatar": {
+                     "image_url": "https://pbs.twimg.com/profile_images/2077111020305162240/PwddgOau_normal.jpg"
+                    },
+                    "core": {
+                     "created_at": "Mon Jul 08 09:31:59 +0000 2013",
+                     "name": "@levelsio",
+                     "screen_name": "levelsio"
+                    },
+                    "id": "VXNlcjoxNTc3MjQxNDAz",
+                    "is_blue_verified": true,
+                    "pinned_items": {
+                     "tweet_ids_str": [
+                      "2107815963269685485"
+                     ]
+                    },
+                    "possibly_sensitive": false,
+                    "privacy": {
+                     "protected": false
+                    },
+                    "profile_bio": {
+                     "description": "\ud83d\udcb8https://t.co/sQ0aiU7v02\n\ud83d\udcf8https://t.co/lAyoqmSBRX $86K/m\n\ud83c\udfaehttps://t.co/tF49atJ396 $44K/m\n\ud83e\udedfhttps://t.co/8rYr9A594z $26K/m\n\ud83c\udfe1https://t.co/1oqUgfD6CZ $21K/m\n\ud83d\udc59@X $17K/m\n\ud83c\udf0dhttps://t.co/UXK5AFqCaQ $12K/m\n\ud83c\udfe9https://t.co/4p4dzTDVN6 $6K/m",
+                     "entities": {
+                      "url": {
+                       "urls": [
+                        {
+                         "url": "https://t.co/6RM0RsUXfe"
+                        }
+                       ]
+                      }
+                     }
+                    },
+                    "relationship_counts": {
+                     "followers": 971353,
+                     "following": 3268
+                    },
+                    "relationship_perspectives": {
+                     "blocked_by": false,
+                     "blocking": false,
+                     "followed_by": false,
+                     "following": true,
+                     "live_following": false,
+                     "muting": false
+                    },
+                    "rest_id": "1577241403",
+                    "tweet_counts": {
+                     "media_tweets": 19807,
+                     "tweets": 181188
+                    },
+                    "verification": {
+                     "verified": false
+                    }
+                   }
+                  }
+                 },
+                 "legacy": {
+                  "bookmark_count": 189,
+                  "conversation_id_str": "2107815963269685485",
+                  "created_at": "Wed Oct 07 12:51:01 +0000 2026",
+                  "entities": {
+                   "urls": [
+                    {
+                     "url": "https://t.co/34vymMfzTr"
+                    }
+                   ],
+                   "user_mentions": [
+                    {
+                     "id_str": "1165044870362189824",
+                     "name": "jaivin",
+                     "screen_name": "jaivinwylde"
+                    }
+                   ]
+                  },
+                  "favorite_count": 1825,
+                  "full_text": "Inspired by @jaivinwylde I put the entire game of Quake III with WORKING multiplayer inside this tweet \ud83d\udc23\n\nJust click below to play!\n\nhttps://t.co/34vymMfzTr",
+                  "id_str": "2107815963269685485",
+                  "is_quote_status": false,
+                  "lang": "en",
+                  "possibly_sensitive": false,
+                  "quote_count": 20,
+                  "reply_count": 124,
+                  "retweet_count": 26,
+                  "user_id_str": "1577241403"
+                 },
+                 "rest_id": "2107815963269685485",
+                 "views": {
+                  "count": "159434",
+                  "state": "EnabledWithCount"
+                 }
+                }
+               },
+               "rest_id": "2108218387474100370",
+               "views": {
+                "count": "14096",
+                "state": "EnabledWithCount"
+               }
+              }
+             }
+            }
+           }
+          },
+          "entryId": "tweet-2108218387474100370",
+          "sortIndex": "2108256834560196606"
+         },
+         {
+          "content": {
+           "__typename": "TimelineTimelineItem",
+           "clientEventInfo": {
+            "component": "organic_tweets",
+            "element": "tweet"
+           },
+           "entryType": "TimelineTimelineItem",
+           "itemContent": {
+            "__typename": "TimelineTweet",
+            "itemType": "TimelineTweet",
+            "tweetDisplayType": "Tweet",
+            "tweet_results": {
+             "result": {
+              "__typename": "Tweet",
+              "core": {
+               "user_results": {
+                "result": {
+                 "__typename": "User",
+                 "avatar": {
+                  "image_url": "https://pbs.twimg.com/profile_images/2077111020305162240/PwddgOau_normal.jpg"
+                 },
+                 "core": {
+                  "created_at": "Mon Jul 08 09:31:59 +0000 2013",
+                  "name": "@levelsio",
+                  "screen_name": "levelsio"
+                 },
+                 "id": "VXNlcjoxNTc3MjQxNDAz",
+                 "is_blue_verified": true,
+                 "pinned_items": {
+                  "tweet_ids_str": [
+                   "2107815963269685485"
+                  ]
+                 },
+                 "possibly_sensitive": false,
+                 "privacy": {
+                  "protected": false
+                 },
+                 "profile_bio": {
+                  "description": "\ud83d\udcb8https://t.co/sQ0aiU7v02\n\ud83d\udcf8https://t.co/lAyoqmSBRX $86K/m\n\ud83c\udfaehttps://t.co/tF49atJ396 $44K/m\n\ud83e\udedfhttps://t.co/8rYr9A594z $26K/m\n\ud83c\udfe1https://t.co/1oqUgfD6CZ $21K/m\n\ud83d\udc59@X $17K/m\n\ud83c\udf0dhttps://t.co/UXK5AFqCaQ $12K/m\n\ud83c\udfe9https://t.co/4p4dzTDVN6 $6K/m",
+                  "entities": {
+                   "url": {
+                    "urls": [
+                     {
+                      "url": "https://t.co/6RM0RsUXfe"
+                     }
+                    ]
+                   }
+                  }
+                 },
+                 "relationship_counts": {
+                  "followers": 971353,
+                  "following": 3268
+                 },
+                 "relationship_perspectives": {
+                  "blocked_by": false,
+                  "blocking": false,
+                  "followed_by": false,
+                  "following": true,
+                  "live_following": false,
+                  "muting": false
+                 },
+                 "rest_id": "1577241403",
+                 "tweet_counts": {
+                  "media_tweets": 19807,
+                  "tweets": 181188
+                 },
+                 "verification": {
+                  "verified": false
+                 }
+                }
+               }
+              },
+              "legacy": {
+               "bookmark_count": 108,
+               "conversation_id_str": "2107544091294916783",
+               "created_at": "Tue Oct 06 18:50:42 +0000 2026",
+               "entities": {},
+               "favorite_count": 451,
+               "full_text": "Brazilians, what's the best washing machine, drier, fridge, freezer and AC brands? \n\nBecause Brazil has import bans/taxes on everything so you can't easily get Euro brands like Miele, Bosch, etc.\n\nFor AC, I'd go with Mitsubishi or LG but not sure if available in BR?",
+               "id_str": "2107544091294916783",
+               "is_quote_status": false,
+               "lang": "en",
+               "quote_count": 2,
+               "reply_count": 305,
+               "retweet_count": 6,
+               "user_id_str": "1577241403"
+              },
+              "rest_id": "2107544091294916783",
+              "views": {
+               "count": "105267",
+               "state": "EnabledWithCount"
+              }
+             }
+            }
+           }
+          },
+          "entryId": "tweet-2107544091294916783",
+          "sortIndex": "2108256834560196589"
+         },
+         {
+          "content": {
+           "__typename": "TimelineTimelineCursor",
+           "cursorType": "Bottom",
+           "entryType": "TimelineTimelineCursor",
+           "value": "DAAHCgABHUIIa8c__-kLAAIAAAATMjEwNzUxMDg2NzQzNjc0MDg2MQgAAwAAAAIAAA"
+          },
+          "entryId": "cursor-bottom-2108256834560196587",
+          "sortIndex": "2108256834560196587"
+         }
+        ],
+        "type": "TimelineAddEntries"
+       }
+      ]
+     }
+    }
+   }
+  }
+ }
+}
