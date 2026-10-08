@@ -43,6 +43,9 @@ export interface TweetRow {
   hasLink: boolean;
   hasHashtag: boolean;
   emojiCount: number;
+  /** whether you have liked / reposted it (as of the last capture) */
+  favorited?: boolean;
+  retweeted?: boolean;
   mentions: string[];
   lastSeen: number;
 }

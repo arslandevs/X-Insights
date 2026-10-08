@@ -65,6 +65,8 @@ export function normalizeTweet(t: Record<string, any>, now = Date.now()): TweetR
     hasPhoto: types.has("photo"),
     hasLink: urls.some((u) => !STATUS_URL.test(String(u?.expanded_url ?? ""))) && urls.length > 0,
     hasHashtag: hashtags.length > 0 || /(^|\s)#\w/.test(text),
+    favorited: legacy.favorited === true,
+    retweeted: legacy.retweeted === true,
     emojiCount: (text.match(/\p{Extended_Pictographic}/gu) ?? []).length,
     mentions: mentionsRaw.map((m) => str(m?.id_str)).filter((x): x is string => !!x),
     lastSeen: now,

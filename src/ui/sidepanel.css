@@ -246,3 +246,12 @@ select.range.active { border-color: var(--accent); color: var(--accent); }
 .reply-box { margin: 4px 0 6px; display: flex; flex-direction: column; gap: 6px; }
 .reply-box textarea { width: 100%; min-height: 64px; resize: vertical; color: var(--text); background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; font: inherit; }
 .reply-box .row-gap { margin: 0; }
+
+/* v0.5 */
+.suggest { display: flex; flex-direction: column; margin-top: 6px; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+button.sg { display: flex; align-items: center; gap: 8px; width: 100%; text-align: left; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; background: var(--panel2); padding: 6px 8px; }
+button.sg:last-child { border-bottom: 0; }
+button.sg:hover { background: rgba(255, 255, 255, 0.08); }
+.sg-t { display: flex; flex-direction: column; min-width: 0; line-height: 1.25; }
+.fa.like.on { color: #f91880; }
+.fa.rt.on { color: #00ba7c; }

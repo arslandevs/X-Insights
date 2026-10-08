@@ -2,6 +2,7 @@ import { NOTIFICATION_OPS, captureOp } from "./captureRules";
 import { bumpCaptureStat, counts, setMeta, tweetsByAuthor, upsertInteractions, upsertTweets, upsertUsers, userByHandle } from "./db";
 import { extractAll } from "./parse";
 import { parseNotifications } from "./parse/notifications";
+import { pageAction, type XAction } from "./xaction";
 
 const channel = new BroadcastChannel("xi");
 
@@ -16,6 +17,9 @@ chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
   } else if (msg.type === "backfill-start" && typeof msg.tabId === "number") {
     void startBackfill(msg.tabId, typeof msg.handle === "string" ? msg.handle : null, typeof msg.untilMs === "number" ? msg.untilMs : null);
     sendResponse({ ok: true });
+  } else if (msg.type === "x-action" && typeof msg.tweetId === "string") {
+    void runXAction(msg.action as XAction, msg.tweetId).then(sendResponse);
+    return true; // answer asynchronously
   } else if (msg.type === "backfill-stop") {
     backfill.stop = true;
     sendResponse({ ok: true });
@@ -97,5 +101,19 @@ async function startBackfill(tabId: number, handle: string | null, untilMs: numb
     backfill.running = false;
     channel.postMessage({ type: "backfill", running: false, loaded, reason });
     channel.postMessage({ type: "updated" });
+  }
+}
+
+/** Like or repost through an open x.com tab (it needs that tab's session). */
+async function runXAction(action: XAction, tweetId: string): Promise<{ ok: boolean; error?: string }> {
+  if (!["like", "unlike", "repost", "unrepost"].includes(action) || !/^\d+$/.test(tweetId)) return { ok: false, error: "Bad request" };
+  const tabs = await chrome.tabs.query({ url: ["https://x.com/*", "https://twitter.com/*"] });
+  const tab = tabs.find((t) => t.active) ?? tabs[0];
+  if (!tab?.id) return { ok: false, error: "Open x.com in a tab first, then try again." };
+  try {
+    const [r] = await chrome.scripting.executeScript({ target: { tabId: tab.id }, func: pageAction, args: [action, tweetId] });
+    return (r?.result as { ok: boolean; error?: string }) ?? { ok: false, error: "No answer from the x.com tab. Reload it." };
+  } catch (e) {
+    return { ok: false, error: "Could not reach the x.com tab. Reload it." };
   }
 }

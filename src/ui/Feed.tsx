@@ -17,11 +17,12 @@ interface Item {
 type Source = "saved" | "all";
 const PAGE = 60;
 
-/** X's own intents: they open X's compose or confirm screen, signed in as you. No API key, nothing sent from here. */
-const intent = (path: string, params: Record<string, string>) => {
-  const url = `https://x.com/intent/${path}?${new URLSearchParams(params)}`;
-  window.open(url, "xi-intent", "popup,width=600,height=720");
-};
+/** Posting is the one thing X refuses outside its own page, so replies and quotes open X's compose screen in a normal tab. */
+const compose = (params: Record<string, string>) => void chrome.tabs.create({ url: `https://x.com/intent/post?${new URLSearchParams(params)}` });
+
+type Act = "like" | "unlike" | "repost" | "unrepost";
+const send = (action: Act, tweetId: string) =>
+  chrome.runtime.sendMessage({ type: "x-action", action, tweetId }) as Promise<{ ok: boolean; error?: string }>;
 
 const LINK = /(https?:\/\/\S+)/g;
 /** A post whose text still ends in the "…" X puts on a preview was not sent in full. */
@@ -47,9 +48,22 @@ function Linked({ text }: { text: string }) {
 function FeedItem({ t, u, now, tz }: { t: TweetRow; u: UserRow; now: number; tz: string }) {
   const [replying, setReplying] = useState(false);
   const [draft, setDraft] = useState("");
+  const [liked, setLiked] = useState(t.favorited === true);
+  const [reposted, setReposted] = useState(t.retweeted === true);
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState("");
   const url = `https://x.com/${u.handle}/status/${t.id}`;
   const media = t.mediaUrls ?? [];
   const text = cardText(t.text, t.hasMedia);
+  const run = async (action: Act, ok: () => void) => {
+    if (busy) return;
+    setBusy(true);
+    setErr("");
+    const r = await send(action, t.id).catch((e) => ({ ok: false, error: String(e?.message ?? e) }));
+    setBusy(false);
+    if (r.ok) ok();
+    else setErr(r.error ?? "Failed");
+  };
   return (
     <div class="fi">
       <Avatar size="sm" user={u} />
@@ -83,16 +97,17 @@ function FeedItem({ t, u, now, tz }: { t: TweetRow; u: UserRow; now: number; tz:
         </div>
         <div class="fi-actions">
           <button class="fa" title="Reply" onClick={() => setReplying(!replying)}><Icon name="reply" size={15} /> Reply</button>
-          <button class="fa rt" title="Repost on X" onClick={() => intent("retweet", { tweet_id: t.id })}><Icon name="repeat" size={15} /> Repost</button>
-          <button class="fa" title="Quote" onClick={() => intent("post", { text: `${draft ? draft + " " : ""}${url}` })}><Icon name="quote" size={15} /> Quote</button>
-          <button class="fa like" title="Like on X" onClick={() => intent("like", { tweet_id: t.id })}><Icon name="heart" size={15} /> Like</button>
+          <button class={`fa rt ${reposted ? "on" : ""}`} disabled={busy} title={reposted ? "Undo repost" : "Repost"} onClick={() => run(reposted ? "unrepost" : "repost", () => setReposted(!reposted))}><Icon name="repeat" size={15} /> {reposted ? "Reposted" : "Repost"}</button>
+          <button class="fa" title="Quote (opens X to write it)" onClick={() => compose({ text: `${draft ? draft + " " : ""}${url}` })}><Icon name="quote" size={15} /> Quote</button>
+          <button class={`fa like ${liked ? "on" : ""}`} disabled={busy} title={liked ? "Unlike" : "Like"} onClick={() => run(liked ? "unlike" : "like", () => setLiked(!liked))}><Icon name="heart" size={15} /> {liked ? "Liked" : "Like"}</button>
         </div>
+        {err && <div class="warn small">{err}</div>}
         {replying && (
           <div class="reply-box">
             <textarea placeholder={`Reply to @${u.handle}`} value={draft} onInput={(e) => setDraft((e.currentTarget as HTMLTextAreaElement).value)} maxLength={280} />
             <div class="row-gap">
-              <span class="muted small">{draft.length}/280 · opens X to post</span>
-              <button disabled={!draft.trim()} onClick={() => intent("post", { in_reply_to: t.id, text: draft })}>Reply</button>
+              <span class="muted small">{draft.length}/280 · X will open to post it</span>
+              <button disabled={!draft.trim()} onClick={() => compose({ in_reply_to: t.id, text: draft })}>Reply</button>
             </div>
           </div>
         )}

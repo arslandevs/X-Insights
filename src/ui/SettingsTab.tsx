@@ -1,4 +1,7 @@
-import { useEffect, useState } from "preact/hooks";
+import { useEffect, useMemo, useState } from "preact/hooks";
+import { allUsers } from "../db";
+import type { UserRow } from "../types";
+import { Avatar } from "./Avatar";
 import { TWEET_OPS } from "../captureRules";
 import { saveSettings } from "../settings";
 import type { TweetRow } from "../types";
@@ -16,6 +19,19 @@ export function SettingsTab({ core, active, tweetsForCsv, now }: { core: Core; a
   const [feedInput, setFeedInput] = useState("");
   const [msg, setMsg] = useState("");
   const bf = useBackfill();
+  const [known, setKnown] = useState<UserRow[]>([]);
+  useEffect(() => {
+    void allUsers().then(setKnown);
+  }, [core.counts.users]);
+  const matches = useMemo(() => {
+    const q = feedInput.trim().replace(/^@/, "").toLowerCase();
+    if (!q) return [];
+    const have = new Set(s.feedHandles.map((h) => h.toLowerCase()));
+    return known
+      .filter((u) => !have.has(u.handle.toLowerCase()) && (u.handleLower.includes(q) || (u.name ?? "").toLowerCase().includes(q)))
+      .sort((a, b) => Number(b.handleLower.startsWith(q)) - Number(a.handleLower.startsWith(q)) || (b.followers ?? 0) - (a.followers ?? 0))
+      .slice(0, 6);
+  }, [feedInput, known, s.feedHandles]);
   const [usage, setUsage] = useState<string>("");
 
   useEffect(() => {
@@ -27,8 +43,8 @@ export function SettingsTab({ core, active, tweetsForCsv, now }: { core: Core; a
   };
 
   const cleanHandle = (v: string) => v.trim().replace(/^@/, "");
-  const addFeed = () => {
-    const h = cleanHandle(feedInput);
+  const addFeed = (picked?: string) => {
+    const h = picked ?? cleanHandle(feedInput);
     if (!/^[A-Za-z0-9_]{1,15}$/.test(h)) return setMsg("That does not look like an X handle.");
     if (s.feedHandles.some((x) => x.toLowerCase() === h.toLowerCase())) return setMsg("Already in the list.");
     setFeedInput("");
@@ -75,9 +91,20 @@ export function SettingsTab({ core, active, tweetsForCsv, now }: { core: Core; a
       <h2>Feed accounts</h2>
       <div class="card">
         <div class="row-gap">
-          <input class="grow" type="text" placeholder="@handle" value={feedInput} onInput={(e) => setFeedInput((e.currentTarget as HTMLInputElement).value)} onKeyDown={(e) => e.key === "Enter" && addFeed()} />
-          <button onClick={addFeed}>Add</button>
+          <input class="grow" type="text" placeholder="Search captured accounts or type @handle" value={feedInput} onInput={(e) => setFeedInput((e.currentTarget as HTMLInputElement).value)} onKeyDown={(e) => e.key === "Enter" && addFeed()} />
+          <button onClick={() => addFeed()}>Add</button>
         </div>
+        {matches.length > 0 && (
+          <div class="suggest">
+            {matches.map((u) => (
+              <button key={u.id} class="sg" onClick={() => addFeed(u.handle)}>
+                <Avatar size="sm" user={u} />
+                <span class="sg-t"><b>{u.name ?? u.handle}</b><span class="muted small">@{u.handle}{u.followers !== null ? ` · ${compact(u.followers)} followers` : ""}</span></span>
+              </button>
+            ))}
+          </div>
+        )}
+        {feedInput.trim() && !matches.length && <div class="muted small spaced">No captured account matches. Press Add to save "{feedInput.trim().replace(/^@/, "")}" as typed; it fills in once you visit its profile.</div>}
         {msg && <div class="warn small">{msg}</div>}
         {s.feedHandles.map((h) => (
           <div class="row" key={h}>
