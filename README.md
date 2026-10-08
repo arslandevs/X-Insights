@@ -6,39 +6,53 @@ Build spec: the full plan this follows is the "X Insights: Personal Chrome Exten
 
 ## Status
 
+All six milestones are built. It has been checked against real captured payloads in a dev harness, but **not yet inside a real loaded extension**: that is the next test.
+
 | Milestone | State |
 | --- | --- |
-| M1 Capture and store | **Done** (needs your manual load-unpacked check, see below) |
-| M2 Profile header and Tweets table | Not started |
-| M3 Cadence | Not started |
-| M4 Engagement | Not started |
-| M5 People and interactions | Not started |
-| M6 Polish | Not started |
+| M1 Capture and store | Done |
+| M2 Profile header, coverage banner, Tweets table | Built |
+| M3 Cadence (heatmaps, streak, busiest day/hour, originals vs replies) | Built |
+| M4 Engagement (impressions, rate, per-metric charts, best/worst, media vs text) | Built |
+| M5 People and interactions (grid, hover card, "You and @handle") | Built |
+| M6 Polish (Feed, Settings, JSON/CSV export, import, clear data, backfill) | Built |
 
-## Try M1
+## Try it
 
 ```bash
 npm install
 npm run build        # writes dist/
-npm test             # parser, rules and DB tests
+npm test             # parser, rules, DB, migration and metrics tests
 ```
 
 1. Open `chrome://extensions`, turn on **Developer mode**, click **Load unpacked**, choose the `dist/` folder.
-2. Open any profile on x.com and scroll. Click the extension's toolbar icon to open the side panel.
-3. The panel shows how many tweets and accounts were captured and a **capture health** list per operation. Scrolling the same profile again must not raise the counts for tweets you already have.
-4. To inspect the data: DevTools → Application → IndexedDB → `x-insights` (`users`, `tweets`, `meta`).
+2. Open x.com **after** loading (reload any open X tab so capture installs at `document_start`).
+3. Visit a profile and scroll its Posts / Replies / Media tabs. Click the toolbar icon to open the side panel; it follows the active tab.
+4. On a non-profile page the panel shows your own account (set **my handle** in Settings if it is not auto-detected).
 
-If a count stays at zero after scrolling, X may have renamed an operation: check the page's network tab for the `/i/api/graphql/<hash>/<Name>` of the timeline and add `Name` to `src/captureRules.ts`.
+What to check:
 
-## What M1 includes
+- Overview numbers and the coverage banner ("Based on N tweets captured...") grow as you scroll; re-scrolling does not double count.
+- Range dropdown (7/30/90/all) changes every card.
+- Tweets tab: sort by column, search text.
+- People tab: visit notifications once so likes/replies/retweets of you are captured; hover an avatar for the card.
+- Settings: capture-health list (a zero for an operation you visited means X renamed it, see below), export JSON/CSV, import, clear data, backfill (gentle auto-scroll, max 60 s / 200 new tweets).
+- Feed: add handles to follow cached accounts.
+
+Inspect raw data in DevTools, Application, IndexedDB, `x-insights`.
+
+If a count stays at zero after scrolling, X may have renamed an operation: find `/i/api/graphql/<hash>/<Name>` in the network tab and add `Name` to `src/captureRules.ts`.
+
+## Architecture
 
 - `src/inject.ts` (page world): wraps `fetch` and `XMLHttpRequest`, copies matching response bodies, never touches requests, headers or cookies
-- `src/bridge.ts` (content script): relays only messages with our signature
-- `src/background.ts` (service worker): parses and upserts into IndexedDB, opens the side panel from the toolbar icon
-- `src/parse/*`: `walk` (finds Tweet and User objects anywhere), tolerant normalisers for tweets and users
-- `src/db.ts`: schema v1 (`users`, `tweets`, `interactions`, `meta`), upsert-by-id with merge (a missing value never erases a known one)
-- Minimal side panel (counts + capture health)
-- Tests (Vitest): parser tests on sanitised real fixtures, capture rules, DB behaviour (fake-indexeddb)
+- `src/bridge.ts` (content script): relays only our messages, detects your own handle from the nav Profile link
+- `src/background.ts` (service worker): parses, upserts into IndexedDB, broadcasts updates, runs backfill
+- `src/parse/*`: `walk` (finds Tweet/User anywhere, by typename or shape), tolerant normalisers, notifications parser
+- `src/db.ts`: schema v2 (`users`, `tweets`, `interactions`, `meta`), merge-upsert (a missing value never erases a known one), export/import
+- `src/metrics/*`: range, cadence, engagement, interactions; timezone-aware via `src/tz.ts`
+- `src/ui/*`: Preact side panel with hand-written SVG charts
+- `dev/`: seeded harness with stub `chrome` APIs for visual checks without loading the extension
 
 ## Findings from live X responses (these changed the plan slightly)
 
@@ -55,11 +69,11 @@ I checked real responses from a signed-in session before writing the parsers:
 ## Decisions and assumptions
 
 - Build uses **esbuild directly** (not Vite/crxjs): content scripts must be single self-contained files, and one esbuild call per entry is the simplest way. Vitest is used for tests.
-- UI is **Preact**, timezone **local**, **Feed tab skipped until M6**, export **JSON + CSV** (later milestones), as in the spec's defaults.
-- `interactions` and the notifications parser arrive in M5; the store exists already.
+- UI is **Preact**, timezone **local** (changeable in Settings), export **JSON + CSV**, as in the spec's defaults.
+- Interactions come from the notifications feed and from posts (replies, quotes, retweets); both are deduped.
 - The capture allowlist matches on the URL path, not the hash.
 
 ## Known limits
 
-- Only data your browser has loaded is available; a new account needs a scroll or two. The coverage banner (M2) will make partial data explicit.
+- Only data your browser has loaded is available; a new account needs a scroll or two. The coverage banner makes partial data explicit.
 - X changes its internal responses without notice. Fixtures plus tolerant parsers keep repairs small: re-capture a fixture and fix.

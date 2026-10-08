@@ -3,6 +3,8 @@ export type TweetKind = "post" | "reply" | "quote" | "retweet";
 export interface UserRow {
   id: string;
   handle: string;
+  /** lower-case handle for case-insensitive lookups (added in schema v2) */
+  handleLower: string;
   name: string | null;
   avatar: string | null;
   bio: string | null;
@@ -30,6 +32,9 @@ export interface TweetRow {
   kind: TweetKind;
   replyToUserId: string | null;
   retweetOfId: string | null;
+  retweetOfAuthorId: string | null;
+  quotedId: string | null;
+  quotedAuthorId: string | null;
   hasMedia: boolean;
   hasVideo: boolean;
   hasPhoto: boolean;
@@ -51,7 +56,18 @@ export interface InteractionRow {
 
 export interface CaptureStat {
   count: number;
+  /** captures that held no tweets and no users (cursor-only polls are normal; a long run of them is a warning) */
+  empty: number;
   tweets: number;
   users: number;
   lastAt: number;
+}
+
+export interface Settings {
+  /** Your own handle (without @). Detected from the page; this overrides it. */
+  meHandle: string | null;
+  /** "local", "UTC" or an IANA name such as "Asia/Karachi". */
+  timezone: string;
+  /** Handles shown in the Feed tab. */
+  feedHandles: string[];
 }

@@ -1,25 +1,50 @@
 {
   "manifest_version": 3,
   "name": "X Insights",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Personal analytics for X profiles, built only from responses your own browser already loaded. Local only.",
   "minimum_chrome_version": "114",
-  "permissions": ["storage", "sidePanel", "tabs"],
-  "host_permissions": ["https://x.com/*", "https://twitter.com/*"],
-  "background": { "service_worker": "background.js", "type": "module" },
+  "permissions": [
+    "storage",
+    "sidePanel",
+    "tabs",
+    "scripting"
+  ],
+  "host_permissions": [
+    "https://x.com/*",
+    "https://twitter.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
   "content_scripts": [
     {
-      "matches": ["https://x.com/*", "https://twitter.com/*"],
-      "js": ["inject.js"],
+      "matches": [
+        "https://x.com/*",
+        "https://twitter.com/*"
+      ],
+      "js": [
+        "inject.js"
+      ],
       "run_at": "document_start",
       "world": "MAIN"
     },
     {
-      "matches": ["https://x.com/*", "https://twitter.com/*"],
-      "js": ["bridge.js"],
+      "matches": [
+        "https://x.com/*",
+        "https://twitter.com/*"
+      ],
+      "js": [
+        "bridge.js"
+      ],
       "run_at": "document_start"
     }
   ],
-  "side_panel": { "default_path": "sidepanel.html" },
-  "action": { "default_title": "X Insights" }
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  },
+  "action": {
+    "default_title": "X Insights"
+  }
 }

@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>X Insights (dev)</title>
+    <link rel="stylesheet" href="../dist/sidepanel.css" />
+    <style>body { max-width: 420px; margin: 0 auto; border-left: 1px solid #333; border-right: 1px solid #333; min-height: 100vh; }</style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script>
+      // Minimal chrome.* stand-ins so the side panel runs in a normal tab.
+      const params = new URLSearchParams(location.search);
+      const tabUrl = params.get("url") || "https://x.com/pbteja1998";
+      const ev = () => ({ addListener() {}, removeListener() {} });
+      window.chrome = {
+        tabs: { query: async () => [{ id: 1, active: true, url: tabUrl }], onActivated: ev(), onUpdated: ev() },
+        windows: { onFocusChanged: ev() },
+        runtime: { sendMessage: async (m) => { console.log("sendMessage", m); return { ok: true }; } },
+      };
+      localStorage.setItem("xi-ui", JSON.stringify({ tab: params.get("tab") || "overview", range: params.get("range") || "30" }));
+    </script>
+    <script src="../dist-dev/seed.js"></script>
+    <script>
+      document.addEventListener("seeded", () => { const s = document.createElement("script"); s.src = "../dist/sidepanel.js"; document.body.appendChild(s); });
+    </script>
+  </body>
+</html>

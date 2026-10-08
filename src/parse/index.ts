@@ -21,5 +21,17 @@ export function extractAll(json: unknown, now = Date.now()): Extracted {
     const row = normalizeTweet(t, now);
     if (row) tweetMap.set(row.id, row);
   }
+  // Older REST responses keep users and tweets in flat maps (globalObjects) without __typename.
+  const g = (json as any)?.globalObjects;
+  if (g && typeof g === "object") {
+    for (const [id, u] of Object.entries<any>(g.users ?? {})) {
+      const row = normalizeUser({ rest_id: id, legacy: u }, now);
+      if (row && !userMap.has(row.id)) userMap.set(row.id, row);
+    }
+    for (const [id, tw] of Object.entries<any>(g.tweets ?? {})) {
+      const row = normalizeTweet({ rest_id: id, legacy: tw }, now);
+      if (row && !tweetMap.has(row.id)) tweetMap.set(row.id, row);
+    }
+  }
   return { users: [...userMap.values()], tweets: [...tweetMap.values()] };
 }

@@ -10,6 +10,9 @@ export const unwrapTweet = (r: unknown): Record<string, any> | undefined => {
   return o.__typename === "TweetWithVisibilityResults" ? asObj(o.tweet) : o;
 };
 
+const authorOf = (tw: Record<string, any> | undefined): string | null =>
+  tw ? first(str(asObj(asObj(asObj(tw.core)?.user_results)?.result)?.rest_id), str(asObj(tw.legacy)?.user_id_str)) : null;
+
 /** Normalise a Tweet object. Missing fields become null (views) or 0 (counts); never throws. */
 export function normalizeTweet(t: Record<string, any>, now = Date.now()): TweetRow | null {
   const legacy = asObj(t.legacy);
@@ -49,6 +52,9 @@ export function normalizeTweet(t: Record<string, any>, now = Date.now()): TweetR
     kind,
     replyToUserId: str(legacy.in_reply_to_user_id_str),
     retweetOfId: isRetweet ? str(unwrapTweet(asObj(legacy.retweeted_status_result)?.result)?.rest_id) : null,
+    retweetOfAuthorId: isRetweet ? authorOf(unwrapTweet(asObj(legacy.retweeted_status_result)?.result)) : null,
+    quotedId: first(str(legacy.quoted_status_id_str), str(unwrapTweet(asObj(t.quoted_status_result)?.result)?.rest_id)),
+    quotedAuthorId: authorOf(unwrapTweet(asObj(t.quoted_status_result)?.result)),
     hasMedia: media.length > 0,
     hasVideo: types.has("video") || types.has("animated_gif"),
     hasPhoto: types.has("photo"),

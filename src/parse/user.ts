@@ -17,6 +17,7 @@ export function normalizeUser(u: Record<string, any>, now = Date.now()): UserRow
   return {
     id,
     handle,
+    handleLower: handle.toLowerCase(),
     name: first(str(core.name), str(legacy.name)),
     avatar: first(str(asObj(u.avatar)?.image_url), str(legacy.profile_image_url_https)),
     bio: first(str(asObj(u.profile_bio)?.description), str(legacy.description)),

@@ -17,6 +17,7 @@ export const GRAPHQL_OPS = new Set([
   "Likes",
   "Favoriters",
   "Retweeters",
+  "NotificationsTimeline",
 ]);
 
 const GRAPHQL_PATH = /\/i\/api\/graphql\/[^/]+\/([A-Za-z0-9_]+)/;
@@ -35,3 +36,7 @@ export function captureOp(url: string): string | null {
   if (NOTIFICATIONS_PATH.test(path)) return "notifications";
   return null;
 }
+
+export const NOTIFICATION_OPS = new Set(["NotificationsTimeline", "notifications"]);
+/** Operations that normally carry tweets. If one keeps returning none, the parser is probably out of date. */
+export const TWEET_OPS = new Set(["UserTweets", "UserTweetsAndReplies", "UserMedia", "UserOriginalsTimeline", "UserRepliesTimeline", "UserVideoTimeline", "HomeTimeline", "HomeLatestTimeline", "SearchTimeline", "TweetDetail"]);
