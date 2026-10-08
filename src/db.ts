@@ -53,6 +53,10 @@ export function mergeRow<T extends object>(existing: T | undefined, incoming: T)
   if (!existing) return incoming;
   const out = { ...existing } as Record<string, unknown>;
   for (const [k, v] of Object.entries(incoming)) if (v !== null && v !== undefined) out[k] = v;
+  // Some responses carry only the 280-character preview of a long post. Never let that replace the full text we already have.
+  const oldText = (existing as Record<string, unknown>).text;
+  const newText = (incoming as Record<string, unknown>).text;
+  if (typeof oldText === "string" && typeof newText === "string" && oldText.length > newText.length) out.text = oldText;
   return out as T;
 }
 

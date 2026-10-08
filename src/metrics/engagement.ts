@@ -78,12 +78,20 @@ export function dailySeries(tweets: TweetRow[], w: Window, tz: string, key: Seri
   return days.map((d) => ({ day: d, value: acc[d] }));
 }
 
-export type RankBy = "views" | "rate";
-const score = (t: TweetRow, by: RankBy) => (by === "views" ? t.views : engagementRate(t));
+export type RankBy = "views" | "rate" | "engagement";
+export const interactions = (t: TweetRow) => t.likes + t.replies + t.retweets + t.quotes + t.bookmarks;
+const score = (t: TweetRow, by: RankBy) => (by === "views" ? t.views : by === "rate" ? engagementRate(t) : interactions(t));
+
+/** Rate is noisy on tiny reach (1 like on 30 views is 3%). Only posts with at least half the median reach compete, and never fewer than 100 views. */
+export function rateFloor(tweets: TweetRow[]): number {
+  const m = median(ownPosts(tweets).map((t) => t.views).filter((v): v is number => v !== null && v > 0));
+  return Math.max(100, (m ?? 0) / 2);
+}
 
 /** Best or worst posts. Posts without a score (hidden views) are left out rather than ranked as zero. */
-export function ranked(tweets: TweetRow[], by: RankBy, dir: "best" | "worst", n = 5): TweetRow[] {
-  const scored = ownPosts(tweets).filter((t) => score(t, by) !== null);
+export function ranked(tweets: TweetRow[], by: RankBy, dir: "best" | "worst", n = 5, pool: TweetRow[] = tweets): TweetRow[] {
+  const floor = by === "rate" ? rateFloor(pool) : 0;
+  const scored = ownPosts(tweets).filter((t) => score(t, by) !== null && (by !== "rate" || (t.views ?? 0) >= floor));
   scored.sort((a, b) => (dir === "best" ? score(b, by)! - score(a, by)! : score(a, by)! - score(b, by)!));
   return scored.slice(0, n);
 }

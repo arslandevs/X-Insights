@@ -19,7 +19,7 @@
         windows: { onFocusChanged: ev() },
         runtime: { sendMessage: async (m) => { console.log("sendMessage", m); return { ok: true }; } },
       };
-      localStorage.setItem("xi-ui", JSON.stringify({ tab: params.get("tab") || "overview", range: params.get("range") || "30" }));
+      localStorage.setItem("xi-ui", JSON.stringify({ tab: params.get("tab") || "overview", range: params.get("range") || "30", ...JSON.parse(params.get("extra") || "{}") }));
     </script>
     <script src="../dist-dev/seed.js"></script>
     <script>

@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from "preact/hooks";
+import { applyFilter, type FilterKey } from "../metrics/filter";
 import { inWindow, windowFor, coverage, type RangeKey } from "../metrics/range";
 import { saveSettings } from "../settings";
 import { clearData, exportCsv, exportJson, importJsonFile } from "./actions";
+import { FilterPicker } from "./FilterPicker";
 import { Feed } from "./Feed";
 import { Overview } from "./Overview";
 import { PeopleGrid } from "./PeopleGrid";
@@ -33,6 +35,7 @@ export function App() {
   const fileRef = useRef<HTMLInputElement>(null);
   const [flash, setFlash] = useState("");
   const [q, setQ] = useState("");
+  const [ft, setFt] = useStored<FilterKey>("tweetFilter", "all");
 
   useEffect(() => {
     const t = setInterval(() => setNow(Date.now()), 60_000);
@@ -44,6 +47,8 @@ export function App() {
     const w = windowFor(range, core.tweets, core.tz, now);
     return core.tweets.filter((t) => inWindow(t, w, core.tz));
   }, [core, range, now]);
+
+  const shownTweets = useMemo(() => applyFilter(rangeTweets, ft), [rangeTweets, ft]);
 
   if (!core) return <div class="muted pad">Loading…</div>;
   const untilMs = range === "all" ? null : Date.parse(windowFor(range, core.tweets, core.tz, now).from);
@@ -103,13 +108,14 @@ export function App() {
           <>
             <div class="toolbar">
               <RangePicker value={range} onChange={setRange} />
+              <FilterPicker value={ft} onChange={setFt} />
               <input class="search" type="search" placeholder="Search" value={q} onInput={(e) => setQ((e.currentTarget as HTMLInputElement).value)} />
               <span class="muted small nowrap" title="Tweets in this range">
-                <Icon name="pen" size={12} /> {rangeTweets.length}
+                <Icon name="pen" size={12} /> {shownTweets.length}
               </span>
             </div>
             <CoverageBar cov={coverage(core.tweets, range, core.tz, now)} handle={core.handle} tz={core.tz} active={active} untilMs={untilMs} />
-            <TweetTable tweets={rangeTweets} handle={core.handle ?? ""} user={core.user} tz={core.tz} now={now} search={q} />
+            <TweetTable tweets={shownTweets} handle={core.handle ?? ""} user={core.user} tz={core.tz} now={now} search={q} />
           </>
         )}
         {tab === "people" && <PeopleGrid core={core} social={social} range={range} now={now} />}

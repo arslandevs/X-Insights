@@ -107,7 +107,14 @@ describe("engagement", () => {
   it("ranks best and worst by views, skipping posts without views", () => {
     expect(ranked(tweets, "views", "best", 2).map((t) => t.id)).toEqual(["a", "b"]);
     expect(ranked(tweets, "views", "worst", 1).map((t) => t.id)).toEqual(["b"]);
-    expect(ranked(tweets, "rate", "best", 3).map((t) => t.id)).toEqual(["a", "b"]);
+    expect(ranked(tweets, "rate", "best", 3).map((t) => t.id)).toEqual(["a"]); // "b" has too little reach to rank by rate
+  });
+  it("ignores tiny-reach posts when ranking by engagement rate", () => {
+    const mk = (id: string, views: number, likes: number) => ({ ...tweets[0], id, kind: "post" as const, views, likes, replies: 0, retweets: 0, quotes: 0, bookmarks: 0 });
+    const pool = [mk("tiny", 30, 10), mk("big", 21000, 1150), mk("mid", 2000, 40), mk("mid2", 3000, 90)];
+    expect(ranked(pool, "rate", "best", 1).map((t) => t.id)).toEqual(["big"]);
+    expect(ranked(pool, "rate", "worst", 1).map((t) => t.id)).toEqual(["mid"]);
+    expect(ranked(pool, "engagement", "best", 1).map((t) => t.id)).toEqual(["big"]);
   });
   it("sums a metric per day over the window", () => {
     const s = dailySeries(tweets, windowFor("7", [], "UTC", NOW), "UTC", "views");

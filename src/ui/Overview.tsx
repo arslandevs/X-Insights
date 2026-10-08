@@ -1,8 +1,10 @@
 import { useMemo, useState } from "preact/hooks";
 import { cadence } from "../metrics/cadence";
-import { dailySeries, engagement, engagementRate, mediaVsText, ranked, type Feature, type RankBy, type SeriesKey } from "../metrics/engagement";
+import { applyFilter, type FilterKey } from "../metrics/filter";
+import { dailySeries, engagement, engagementRate, interactions, mediaVsText, ranked, type Feature, type RankBy, type SeriesKey } from "../metrics/engagement";
 import { coverage, inWindow, windowFor, type RangeKey } from "../metrics/range";
 import type { TweetRow } from "../types";
+import { FilterPicker } from "./FilterPicker";
 import { Heatmap } from "./Heatmap";
 import { Icon, type IconName } from "./Icon";
 import { LineChart, Sparkline } from "./LineChart";
@@ -30,6 +32,15 @@ const FEATURE: Record<Feature, { icon: IconName; label: string }> = {
   hashtag: { icon: "hash", label: "Hashtag" },
   emoji: { icon: "smile", label: "Emoji" },
 };
+
+const STRIP: { key: "views" | "likes" | "retweets" | "replies" | "quotes" | "bookmarks"; icon: IconName; label: string; color: string }[] = [
+  { key: "views", icon: "eye", label: "Impressions", color: "#1d9bf0" },
+  { key: "likes", icon: "heart", label: "Likes", color: "#f91880" },
+  { key: "retweets", icon: "repeat", label: "Reposts", color: "#00ba7c" },
+  { key: "replies", icon: "reply", label: "Replies", color: "#7856ff" },
+  { key: "quotes", icon: "quote", label: "Quotes", color: "#ff7a00" },
+  { key: "bookmarks", icon: "bookmark", label: "Bookmarks", color: "#ffd400" },
+];
 
 const SERIES: { key: SeriesKey; icon: IconName; label: string; color: string }[] = [
   { key: "views", icon: "eye", label: "Impressions", color: "#1d9bf0" },
@@ -64,6 +75,7 @@ function PostsTable({ title, icon, tweets, by, core, now }: { title: string; ico
             <th title="Posted"><Icon name="clock" size={12} title="Posted" /></th>
             <th class="num" title="Views"><Icon name="eye" size={12} title="Views" /></th>
             <th class="num" title="Likes"><Icon name="heart" size={12} title="Likes" /></th>
+            <th class="num" title="Total interactions"><Icon name="activity" size={12} title="Total interactions" /></th>
             <th class="num" title="Engagement rate"><Icon name="percent" size={12} title="Engagement rate" /></th>
           </tr>
         </thead>
@@ -71,11 +83,15 @@ function PostsTable({ title, icon, tweets, by, core, now }: { title: string; ico
           {tweets.map((t) => (
             <tr key={t.id} {...hover.props(t)}>
               <td class="content">
-                <a href={`https://x.com/${core.handle ?? ""}/status/${t.id}`} target="_blank" rel="noreferrer">{firstLine(t.text) || "(no text)"}</a>
+                <a href={`https://x.com/${core.handle ?? ""}/status/${t.id}`} target="_blank" rel="noreferrer">
+                  {t.kind !== "post" && <span class={`kind k-${t.kind}`}>{t.kind}</span>}
+                  {firstLine(t.text) || "(no text)"}
+                </a>
               </td>
               <td class="nowrap muted" title={t.createdAt ? timeStr(t.createdAt, core.tz) : ""}>{t.createdAt ? timeStr(t.createdAt, core.tz).replace(/, /, " · ") : "–"}</td>
               <td class={`num ${by === "views" ? "hl" : ""}`}>{compact(t.views)}</td>
               <td class="num">{compact(t.likes)}</td>
+              <td class={`num ${by === "engagement" ? "hl" : ""}`}>{compact(interactions(t))}</td>
               <td class={`num ${by === "rate" ? "hl" : ""}`}>{pct(engagementRate(t))}</td>
             </tr>
           ))}
@@ -109,8 +125,10 @@ export function Overview({ core, range, now, active, untilMs }: Props) {
   const eng = useMemo(() => engagement(inRange), [inRange]);
   const cov = useMemo(() => coverage(tweets, range, tz, now), [tweets, range, tz, now]);
   const [rankBy, setRankBy] = useState<RankBy>("views");
+  const [rankFilter, setRankFilter] = useState<FilterKey>("all");
   const [metric, setMetric] = useState<SeriesKey>("views");
   const splitTip = useTip();
+  const rankPool = useMemo(() => applyFilter(inRange, rankFilter), [inRange, rankFilter]);
 
   const days = useMemo(() => dailySeries(inRange, win, tz, "views").map((d) => d.day), [inRange, win, tz]);
   const series = (key: SeriesKey) => dailySeries(inRange, win, tz, key);
@@ -139,6 +157,19 @@ export function Overview({ core, range, now, active, untilMs }: Props) {
 
       {cov.count > 0 && (
         <>
+          {eng.posts > 0 && (
+            <div class="strip" title="Totals for your posts in the selected range">
+              {STRIP.map((x) => {
+                const total = x.key === "views" ? eng.views.total : eng[x.key].total;
+                return (
+                  <span key={x.key} class="strip-i" style={{ color: x.color }} title={`${x.label}: ${total.toLocaleString()}${x.key !== "views" ? ` · ${pct(eng.mix[x.key], 0)} of engagement` : ""}`}>
+                    <Icon name={x.icon} size={14} />
+                    <b>{compact(total)}</b>
+                  </span>
+                );
+              })}
+            </div>
+          )}
           <div class="tiles">
             <Tile icon="pen" value={cad.total} label="Posts" hint={`${cad.activeDays} of ${cad.totalDays} days active`} color="var(--accent)" />
             <Tile icon="zap" value={cad.avgPerDay >= 10 ? Math.round(cad.avgPerDay) : cad.avgPerDay.toFixed(1)} label="Per day" />
@@ -211,15 +242,17 @@ export function Overview({ core, range, now, active, untilMs }: Props) {
 
               <div class="sec-head">
                 <span class="sec-t">Best and worst posts</span>
+                <FilterPicker value={rankFilter} onChange={setRankFilter} />
                 <select class="mini" value={rankBy} onChange={(e) => setRankBy((e.currentTarget as HTMLSelectElement).value as RankBy)} aria-label="Rank by">
                   <option value="views">By views</option>
                   <option value="rate">By engagement rate</option>
+                  <option value="engagement">By interactions</option>
                 </select>
               </div>
               <div class="card">
-                <PostsTable title="Best" icon="up" tweets={ranked(inRange, rankBy, "best")} by={rankBy} core={core} now={now} />
-                <PostsTable title="Worst" icon="down" tweets={ranked(inRange, rankBy, "worst")} by={rankBy} core={core} now={now} />
-                {ranked(inRange, rankBy, "best").length === 0 && <div class="muted small">No posts with view counts yet.</div>}
+                <PostsTable title="Best" icon="up" tweets={ranked(rankPool, rankBy, "best", 5, inRange)} by={rankBy} core={core} now={now} />
+                <PostsTable title="Worst" icon="down" tweets={ranked(rankPool, rankBy, "worst", 5, inRange)} by={rankBy} core={core} now={now} />
+                {ranked(rankPool, rankBy, "best", 5, inRange).length === 0 && <div class="muted small">No posts with view counts yet.</div>}
               </div>
 
               <div class="sec-head">
