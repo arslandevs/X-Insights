@@ -5,10 +5,11 @@ import { clearData, exportCsv, exportJson, importJsonFile } from "./actions";
 import { Feed } from "./Feed";
 import { Overview } from "./Overview";
 import { PeopleGrid } from "./PeopleGrid";
-import { CoverageBanner, ProfileHeader } from "./ProfileHeader";
+import { CoverageBar } from "./ProfileHeader";
 import { RangePicker } from "./RangePicker";
 import { SettingsTab } from "./SettingsTab";
 import { TweetTable } from "./TweetTable";
+import { Icon } from "./Icon";
 import { useActiveTab, useLive, useStored } from "./hooks";
 import { loadCore, loadSocial } from "./load";
 
@@ -31,6 +32,7 @@ export function App() {
   const [menu, setMenu] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
   const [flash, setFlash] = useState("");
+  const [q, setQ] = useState("");
 
   useEffect(() => {
     const t = setInterval(() => setNow(Date.now()), 60_000);
@@ -44,6 +46,7 @@ export function App() {
   }, [core, range, now]);
 
   if (!core) return <div class="muted pad">Loading…</div>;
+  const untilMs = range === "all" ? null : Date.parse(windowFor(range, core.tweets, core.tz, now).from);
 
   const context = active.handle
     ? `@${active.handle}`
@@ -95,12 +98,18 @@ export function App() {
         ))}
       </nav>
       <main>
-        {tab === "overview" && <Overview core={core} range={range} now={now} />}
+        {tab === "overview" && <Overview core={core} range={range} now={now} active={active} untilMs={untilMs} />}
         {tab === "tweets" && (
           <>
-            <ProfileHeader core={core} now={now} />
-            <CoverageBanner cov={coverage(core.tweets, range, core.tz, now)} range={range} handle={core.handle} tz={core.tz} />
-            <TweetTable tweets={rangeTweets} handle={core.handle ?? ""} tz={core.tz} now={now} />
+            <div class="toolbar">
+              <RangePicker value={range} onChange={setRange} />
+              <input class="search" type="search" placeholder="Search" value={q} onInput={(e) => setQ((e.currentTarget as HTMLInputElement).value)} />
+              <span class="muted small nowrap" title="Tweets in this range">
+                <Icon name="pen" size={12} /> {rangeTweets.length}
+              </span>
+            </div>
+            <CoverageBar cov={coverage(core.tweets, range, core.tz, now)} handle={core.handle} tz={core.tz} active={active} untilMs={untilMs} />
+            <TweetTable tweets={rangeTweets} handle={core.handle ?? ""} user={core.user} tz={core.tz} now={now} search={q} />
           </>
         )}
         {tab === "people" && <PeopleGrid core={core} social={social} range={range} now={now} />}

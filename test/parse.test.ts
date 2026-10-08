@@ -122,3 +122,11 @@ describe("tweet", () => {
     expect(() => normalizeTweet({ __typename: "Tweet", rest_id: "1", legacy: null, core: 5 } as any)).not.toThrow();
   });
 });
+
+import { normalizeTweet as nt2 } from "../src/parse/tweet";
+import { it as it3, expect as expect3 } from "vitest";
+it3("keeps photo and video thumbnails for the hover card", () => {
+  const t = nt2({ rest_id: "9", legacy: { full_text: "x &gt; y", created_at: "Wed Oct 08 10:00:00 +0000 2026", extended_entities: { media: [{ type: "photo", media_url_https: "https://pbs.twimg.com/media/a.jpg" }, { type: "video", media_url_https: "https://pbs.twimg.com/thumb/b.jpg" }] } } });
+  expect3(t?.mediaUrls).toEqual(["https://pbs.twimg.com/media/a.jpg", "https://pbs.twimg.com/thumb/b.jpg"]);
+  expect3(t?.text).toBe("x > y");
+});

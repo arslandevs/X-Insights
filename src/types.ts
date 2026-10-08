@@ -36,6 +36,8 @@ export interface TweetRow {
   quotedId: string | null;
   quotedAuthorId: string | null;
   hasMedia: boolean;
+  /** thumbnail / photo URLs (up to 4); absent on rows captured before this field existed */
+  mediaUrls?: string[];
   hasVideo: boolean;
   hasPhoto: boolean;
   hasLink: boolean;

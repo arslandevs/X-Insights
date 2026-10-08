@@ -2,28 +2,11 @@ import { useEffect, useState } from "preact/hooks";
 import { TWEET_OPS } from "../captureRules";
 import { saveSettings } from "../settings";
 import type { TweetRow } from "../types";
+import { useBackfill } from "./Backfill";
 import { clearData, exportCsv, exportJson, importJsonFile } from "./actions";
 import { compact, when } from "./format";
 import type { ActiveTab } from "./hooks";
 import type { Core } from "./load";
-
-interface Backfill {
-  running: boolean;
-  loaded: number;
-  reason?: string;
-}
-
-function useBackfill(): Backfill {
-  const [s, setS] = useState<Backfill>({ running: false, loaded: 0 });
-  useEffect(() => {
-    const ch = new BroadcastChannel("xi");
-    ch.onmessage = (e) => {
-      if (e.data?.type === "backfill") setS({ running: !!e.data.running, loaded: e.data.loaded ?? 0, reason: e.data.reason });
-    };
-    return () => ch.close();
-  }, []);
-  return s;
-}
 
 const COMMON_TZ = ["local", "UTC", "Asia/Karachi", "Asia/Kolkata", "Asia/Dubai", "Europe/London", "Europe/Berlin", "America/New_York", "America/Chicago", "America/Los_Angeles"];
 
@@ -133,13 +116,13 @@ export function SettingsTab({ core, active, tweetsForCsv, now }: { core: Core; a
       <h2>Load more history</h2>
       <div class="card">
         <div class="muted small">
-          Scrolls the profile open in your active tab slowly (one step every 1.5–3 seconds) and stops after 60 seconds or about 200 tweets. Off unless you press the button. Heavy automation can trigger X rate limits on your account.
+          Scrolls the profile open in your active tab slowly (one step every 1.5–3 seconds) and stops after a few minutes, about 3,000 tweets, or when the timeline ends. Off unless you press the button. Heavy automation can trigger X rate limits on your account.
         </div>
         <div class="row-gap spaced">
           {bf.running ? (
             <button onClick={() => chrome.runtime.sendMessage({ type: "backfill-stop" })}>Stop</button>
           ) : (
-            <button disabled={!canBackfill} onClick={() => chrome.runtime.sendMessage({ type: "backfill-start", tabId: active.tabId })}>
+            <button disabled={!canBackfill} onClick={() => chrome.runtime.sendMessage({ type: "backfill-start", tabId: active.tabId, handle: active.handle, untilMs: null })}>
               Load more history
             </button>
           )}

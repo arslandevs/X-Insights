@@ -42,3 +42,15 @@ export function ageStr(createdAt: number | null, now = Date.now()) {
 export const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 export const WEEKDAYS_LONG = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 export const hourLabel = (h: number) => `${h % 12 || 12}${h < 12 ? "am" : "pm"}`;
+
+import { decodeEntities } from "../parse/tweet";
+
+/** Old rows were stored HTML-escaped; decode again so they read the same as new ones. */
+export const cleanText = (s: string) => decodeEntities(s);
+/** First line only, for one-line table cells. */
+export const firstLine = (s: string) => cleanText(s).split(/\r?\n/).find((l) => l.trim()) ?.trim() ?? "";
+/** Full text for the tweet card: unescaped, without the trailing t.co link X adds for attached media. */
+export const cardText = (s: string, hasMedia: boolean) => {
+  const t = cleanText(s);
+  return hasMedia ? t.replace(/\s*https:\/\/t\.co\/\w+\s*$/, "") : t;
+};

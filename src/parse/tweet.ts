@@ -1,6 +1,10 @@
 import type { TweetKind, TweetRow } from "../types";
 import { asObj, first, num, parseDate, str } from "./util";
 
+const ENTITIES: Record<string, string> = { "&amp;": "&", "&lt;": "<", "&gt;": ">", "&quot;": '"', "&#39;": "'", "&apos;": "'" };
+/** X sends text HTML-escaped (`&gt;`, `&amp;`). Show it the way it was written. */
+export const decodeEntities = (s: string) => s.replace(/&(amp|lt|gt|quot|apos|#39);/g, (m) => ENTITIES[m] ?? m);
+
 const STATUS_URL = /(?:x|twitter)\.com\/[^/]+\/status\//;
 
 /** TweetWithVisibilityResults wraps the real tweet in `.tweet`. */
@@ -23,7 +27,7 @@ export function normalizeTweet(t: Record<string, any>, now = Date.now()): TweetR
   if (!id) return null;
 
   const noteText = str(asObj(asObj(asObj(t.note_tweet)?.note_tweet_results)?.result)?.text);
-  const text = noteText ?? str(legacy.full_text) ?? "";
+  const text = decodeEntities(noteText ?? str(legacy.full_text) ?? "");
 
   const media: Record<string, any>[] = (asObj(legacy.extended_entities)?.media ?? asObj(legacy.entities)?.media ?? []) as Record<string, any>[];
   const types = new Set(media.map((m) => m?.type));
@@ -56,6 +60,7 @@ export function normalizeTweet(t: Record<string, any>, now = Date.now()): TweetR
     quotedId: first(str(legacy.quoted_status_id_str), str(unwrapTweet(asObj(t.quoted_status_result)?.result)?.rest_id)),
     quotedAuthorId: authorOf(unwrapTweet(asObj(t.quoted_status_result)?.result)),
     hasMedia: media.length > 0,
+    mediaUrls: media.map((m) => str(m?.media_url_https)).filter((x): x is string => !!x).slice(0, 4),
     hasVideo: types.has("video") || types.has("animated_gif"),
     hasPhoto: types.has("photo"),
     hasLink: urls.some((u) => !STATUS_URL.test(String(u?.expanded_url ?? ""))) && urls.length > 0,

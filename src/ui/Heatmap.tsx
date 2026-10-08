@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "preact/hooks";
 import { addDays, prettyDay, weekdayOf } from "../tz";
+import { useTip } from "./Tip";
 
 const GAP = 3;
 const MAX_WEEKS = 53;
@@ -14,6 +15,7 @@ interface Props {
 /** GitHub-style calendar: columns are weeks, rows Sunday to Saturday, shade is the count that day. */
 export function Heatmap({ days, perDay, noun = "activities" }: Props) {
   const scroller = useRef<HTMLDivElement>(null);
+  const tip = useTip();
   const first = days[0];
   const last = days[days.length - 1];
   const lastWeekStart = addDays(last, -weekdayOf(last));
@@ -37,18 +39,29 @@ export function Heatmap({ days, perDay, noun = "activities" }: Props) {
       const used = inRange.has(key);
       const level = !used ? -1 : n === 0 ? 0 : Math.min(4, Math.ceil((4 * n) / max));
       cells.push(
-        <rect key={key} x={w * (CELL + GAP)} y={r * (CELL + GAP)} width={CELL} height={CELL} rx={2} class={`hm hm${level}`}>
-          <title>{used ? `${n} ${n === 1 ? noun.replace(/ies$/, "y").replace(/s$/, "") : noun} on ${prettyDay(key)}` : prettyDay(key)}</title>
-        </rect>,
+        <rect key={key} x={w * (CELL + GAP)} y={r * (CELL + GAP)} width={CELL} height={CELL} rx={2} class={`hm hm${level}`} data-tip={used ? `${n} ${n === 1 ? noun.replace(/ies$/, "y").replace(/s$/, "") : noun}|${prettyDay(key)}` : ""} />,
       );
     }
   }
   const width = weeks * (CELL + GAP);
   return (
     <div class="hm-wrap" ref={scroller}>
-      <svg width={width} height={7 * (CELL + GAP)} role="img" aria-label="Daily activity">
+      <svg
+        width={width}
+        height={7 * (CELL + GAP)}
+        role="img"
+        aria-label="Daily activity"
+        onPointerMove={(e) => {
+          const d = (e.target as Element).getAttribute?.("data-tip");
+          if (!d) return tip.hide();
+          const [a, b] = d.split("|");
+          tip.show(e, <><b>{a}</b><div class="muted">{b}</div></>);
+        }}
+        onPointerLeave={tip.hide}
+      >
         {cells}
       </svg>
+      {tip.box}
     </div>
   );
 }

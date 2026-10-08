@@ -85,3 +85,9 @@ describe("notifications", () => {
     expect(e.tweets[0].id).toBe("50");
   });
 });
+
+import { decodeEntities } from "../src/parse/tweet";
+import { it as it2, expect as expect2 } from "vitest";
+it2("decodes the HTML entities X puts in tweet text", () => {
+  expect2(decodeEntities("a &gt; b &amp; c &lt;d&gt; &quot;q&quot; it&#39;s")).toBe("a > b & c <d> \"q\" it's");
+});

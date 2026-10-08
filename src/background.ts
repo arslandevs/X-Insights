@@ -1,5 +1,5 @@
 import { NOTIFICATION_OPS, captureOp } from "./captureRules";
-import { bumpCaptureStat, counts, setMeta, upsertInteractions, upsertTweets, upsertUsers } from "./db";
+import { bumpCaptureStat, counts, setMeta, tweetsByAuthor, upsertInteractions, upsertTweets, upsertUsers, userByHandle } from "./db";
 import { extractAll } from "./parse";
 import { parseNotifications } from "./parse/notifications";
 
@@ -14,7 +14,7 @@ chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
   } else if (msg.type === "me" && typeof msg.handle === "string") {
     void setMeta("meHandleDetected", msg.handle).then(() => channel.postMessage({ type: "updated" }));
   } else if (msg.type === "backfill-start" && typeof msg.tabId === "number") {
-    void startBackfill(msg.tabId);
+    void startBackfill(msg.tabId, typeof msg.handle === "string" ? msg.handle : null, typeof msg.untilMs === "number" ? msg.untilMs : null);
     sendResponse({ ok: true });
   } else if (msg.type === "backfill-stop") {
     backfill.stop = true;
@@ -39,19 +39,31 @@ async function handleCapture(url: string, text: string) {
 }
 
 // ---- optional, user-triggered backfill: scrolls the profile slowly, then stops ---------------------
-const BACKFILL_MAX_MS = 60_000;
-const BACKFILL_MAX_TWEETS = 200;
+const BACKFILL_MAX_MS = 4 * 60_000;
+const BACKFILL_MAX_TWEETS = 3000;
+/** Rounds in a row with nothing new before we call it the end of the timeline. */
+const BACKFILL_STALL_ROUNDS = 5;
 const backfill = { running: false, stop: false };
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-async function startBackfill(tabId: number) {
+/** How many stored posts of this profile are at least as old as `untilMs`. A pinned old post counts once, so we ask for three. */
+async function olderThan(handle: string | null, untilMs: number | null): Promise<number> {
+  if (!handle || untilMs === null) return 0;
+  const u = await userByHandle(handle);
+  if (!u) return 0;
+  return (await tweetsByAuthor(u.id)).filter((t) => t.createdAt !== null && t.createdAt <= untilMs).length;
+}
+
+async function startBackfill(tabId: number, handle: string | null, untilMs: number | null) {
   if (backfill.running) return;
   backfill.running = true;
   backfill.stop = false;
   const started = Date.now();
   const base = (await counts()).tweets;
   let reason = "time limit";
+  let last = 0;
+  let stalled = 0;
   channel.postMessage({ type: "backfill", running: true, loaded: 0 });
   try {
     while (Date.now() - started < BACKFILL_MAX_MS) {
@@ -62,6 +74,16 @@ async function startBackfill(tabId: number) {
       const loaded = (await counts()).tweets - base;
       if (loaded >= BACKFILL_MAX_TWEETS) {
         reason = "reached the limit";
+        break;
+      }
+      if ((await olderThan(handle, untilMs)) >= 3) {
+        reason = "reached the start of the range";
+        break;
+      }
+      stalled = loaded > last ? 0 : stalled + 1;
+      last = loaded;
+      if (stalled >= BACKFILL_STALL_ROUNDS) {
+        reason = "no older posts left";
         break;
       }
       await chrome.scripting.executeScript({ target: { tabId }, func: () => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: "smooth" }) });

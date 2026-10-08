@@ -1,11 +1,13 @@
 import type { TweetRow } from "../types";
 import { addDays, dayDiff, dayKey } from "../tz";
 
-export type RangeKey = "7" | "30" | "90" | "all";
+export type RangeKey = "7" | "30" | "90" | "180" | "365" | "all";
 export const RANGES: { key: RangeKey; label: string }[] = [
   { key: "7", label: "Last 7 days" },
   { key: "30", label: "Last 30 days" },
   { key: "90", label: "Last 90 days" },
+  { key: "180", label: "Last 6 months" },
+  { key: "365", label: "Last year" },
   { key: "all", label: "All captured" },
 ];
 

@@ -1,12 +1,13 @@
 import { useMemo } from "preact/hooks";
 import { allInteractions, allTweets } from "../db";
 import { between, buildEvents } from "../metrics/interactions";
+import { Icon } from "./Icon";
 import { useLive } from "./hooks";
 import type { Core } from "./load";
 
-const plural = (n: number, w: string) => `${n} ${w}${n === 1 ? "" : "s"}`;
+const yn = (v: boolean | null) => (v === null ? "unknown" : v ? "yes" : "no");
 
-/** "You and @handle": what has passed between us in the data captured so far. */
+/** You and this account: interactions each way and who follows whom, as a single strip. */
 export function YouAnd({ core }: { core: Core }) {
   const { me, user } = core;
   const { data } = useLive(async () => ({ tweets: await allTweets(), notifs: await allInteractions() }), []);
@@ -15,27 +16,21 @@ export function YouAnd({ core }: { core: Core }) {
     return between(buildEvents(me.id, data.tweets, data.notifs), user.id, null);
   }, [data, me, user]);
   if (!me || !user || !x) return null;
-  const follow = (v: boolean | null, yes: string, no: string) => (v === null ? "unknown" : v ? yes : no);
-  const types = Object.entries(x.byType)
-    .map(([k, n]) => `${n} ${k}${(n as number) === 1 ? "" : "s"}`)
-    .join(", ");
+  const types = Object.entries(x.byType).map(([k, n]) => `${n} ${k}`).join(", ");
   return (
-    <div class="card">
-      <div class="muted">You and @{user.handle}</div>
-      <div class="row">
-        <span>
-          They → you: <b>{x.inbound}</b>
-        </span>
-        <span>
-          You → them: <b>{x.outbound}</b>
-        </span>
-      </div>
-      {types && <div class="muted small">{types}</div>}
-      {x.inbound + x.outbound === 0 && <div class="muted small">No replies or mentions between you seen yet.</div>}
-      <div class="small spaced">
-        You {follow(user.youFollow, "follow them", "don't follow them")} · they {follow(user.followsYou, "follow you", "don't follow you")}
-      </div>
-      <div class="muted small">{plural(x.inbound + x.outbound, "interaction")} seen so far; this grows as you browse notifications and replies.</div>
+    <div class="card youand" title={types || "No interactions between you seen yet. Open your Notifications on x.com to capture them."}>
+      <span class="ya" title={`They interacted with you ${x.inbound} times`}>
+        @{user.handle} <Icon name="right" size={13} /> you <b>{x.inbound}</b>
+      </span>
+      <span class="ya" title={`You interacted with them ${x.outbound} times`}>
+        you <Icon name="right" size={13} /> them <b>{x.outbound}</b>
+      </span>
+      <span class={`ya f ${user.youFollow ? "on" : ""}`} title={`You follow them: ${yn(user.youFollow)}`}>
+        <Icon name="users" size={13} /> you {user.youFollow ? "✓" : "✗"}
+      </span>
+      <span class={`ya f ${user.followsYou ? "on" : ""}`} title={`They follow you: ${yn(user.followsYou)}`}>
+        <Icon name="users" size={13} /> them {user.followsYou ? "✓" : "✗"}
+      </span>
     </div>
   );
 }
