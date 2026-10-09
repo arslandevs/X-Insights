@@ -270,3 +270,7 @@ button.sg:hover { background: rgba(255, 255, 255, 0.08); }
 .lift .pb span { line-height: 13px; font-size: 10px; }
 .lift-base { display: none; }
 .tabs button { font-size: 12.5px; padding: 8px 4px; }
+
+/* toolbar popup (browsers without a side panel, e.g. Arc) */
+html.popup { width: 440px; height: 590px; overflow-y: auto; }
+html.popup body { margin: 0; }

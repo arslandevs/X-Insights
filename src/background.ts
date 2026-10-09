@@ -6,6 +6,13 @@ import { pageAction, type XAction } from "./xaction";
 
 const channel = new BroadcastChannel("xi");
 
+// Chrome remembers an earlier "open the panel on click" setting; clear it so the click reaches onClicked below.
+chrome.sidePanel?.setPanelBehavior?.({ openPanelOnActionClick: false }).catch(() => {});
+
+// Arc: no real side panel, so the toolbar icon opens the panel as a popup.
+const POPUP = "sidepanel.html?popup=1";
+chrome.storage.local.get("isArc").then((r) => r.isArc && chrome.action.setPopup({ popup: POPUP })).catch(() => {});
+
 // Toolbar click: try the side panel; if no panel answers (browsers such as Arc expose the API but show nothing), open the same
 // panel in a small window instead.
 let panelWindow: number | undefined;
@@ -38,6 +45,9 @@ chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
   if (!msg || typeof msg !== "object") return;
   if (msg.type === "capture" && typeof msg.url === "string" && typeof msg.text === "string") {
     void handleCapture(msg.url, msg.text);
+  } else if (msg.type === "arc") {
+    void chrome.storage.local.set({ isArc: true });
+    void chrome.action.setPopup({ popup: POPUP });
   } else if (msg.type === "me" && typeof msg.handle === "string") {
     void setMeta("meHandleDetected", msg.handle).then(() => channel.postMessage({ type: "updated" }));
   } else if (msg.type === "backfill-start" && typeof msg.tabId === "number") {

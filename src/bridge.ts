@@ -34,3 +34,12 @@ setInterval(() => {
     }
   }
 }, 3000);
+
+// Arc paints its theme variables onto every page. Arc has no usable side panel, so the service worker switches the toolbar icon to a popup.
+window.addEventListener("DOMContentLoaded", () => {
+  try {
+    if (getComputedStyle(document.documentElement).getPropertyValue("--arc-palette-title").trim()) chrome.runtime.sendMessage({ type: "arc" }).catch(() => {});
+  } catch {
+    /* ignore */
+  }
+});
