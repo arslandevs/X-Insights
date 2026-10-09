@@ -19,7 +19,17 @@ A side panel that follows the profile in your active x.com tab.
 
 Ranges: Today, 3, 7, 30, 90 days, 6 months, 1 year, all captured. Everything is stored locally in IndexedDB.
 
-## Install (load unpacked)
+## Install in another browser (Chrome, Brave, Arc, Edge...)
+
+1. Download `x-insights-v0.3.0.zip` from the [latest release](https://github.com/arslandevs/X-Insights/releases/latest) and unzip it somewhere permanent (the browser reads from that folder, so do not delete it).
+2. Open `chrome://extensions`, turn on **Developer mode**, click **Load unpacked**, pick the unzipped folder.
+3. Reload any open x.com tab.
+
+Data is stored per browser. To move it: **Settings → Export JSON** in the old browser, **Import JSON** in the new one.
+
+To update: download the new zip, replace the folder contents, click **Reload** on the extension card.
+
+## Install from source (load unpacked)
 
 ```bash
 npm install
