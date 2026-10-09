@@ -41,8 +41,12 @@ chrome.action.onClicked.addListener(async (tab) => {
   panelWindow = w?.id;
 });
 
-chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (!msg || typeof msg !== "object") return;
+  if (msg.type === "whoami") {
+    sendResponse({ tabId: sender.tab?.id ?? null });
+    return;
+  }
   if (msg.type === "capture" && typeof msg.url === "string" && typeof msg.text === "string") {
     void handleCapture(msg.url, msg.text);
   } else if (msg.type === "arc") {

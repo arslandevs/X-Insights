@@ -21,9 +21,11 @@ Ranges: Today, 3, 7, 30, 90 days, 6 months, 1 year, all captured. Everything is 
 
 ## Install in another browser (Chrome, Brave, Arc, Edge...)
 
-1. Download `x-insights-v0.3.3.zip` from the [latest release](https://github.com/arslandevs/X-Insights/releases/latest) and unzip it somewhere permanent (the browser reads from that folder, so do not delete it).
+1. Download `x-insights-v0.4.0.zip` from the [latest release](https://github.com/arslandevs/X-Insights/releases/latest) and unzip it somewhere permanent (the browser reads from that folder, so do not delete it).
 2. Open `chrome://extensions`, turn on **Developer mode**, click **Load unpacked**, pick the unzipped folder.
 3. Reload any open x.com tab.
+
+On any x.com page a small **X Insights tab on the right edge** opens the panel docked over the page. This works everywhere, including Arc, whatever the toolbar icon does. Turn it off in Settings.
 
 **Arc** does not show Chrome's side panel, so the extension detects Arc (on any x.com page) and the toolbar icon then opens the panel as a popup. Reload an x.com tab once after installing. If a browser shows no panel at all, a small window opens instead. It still follows the tab you last used.
 

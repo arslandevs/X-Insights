@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "X Insights",
-  "version": "0.3.3",
+  "version": "0.4.0",
   "description": "Personal analytics for X profiles, built only from responses your own browser already loaded. Local only.",
   "minimum_chrome_version": "116",
   "permissions": [
@@ -58,5 +58,20 @@
     "32": "icons/icon32.png",
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
-  }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "sidepanel.html",
+        "sidepanel.js",
+        "sidepanel.css",
+        "icons/*"
+      ],
+      "matches": [
+        "https://x.com/*",
+        "https://twitter.com/*"
+      ],
+      "use_dynamic_url": true
+    }
+  ]
 }

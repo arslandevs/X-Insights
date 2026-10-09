@@ -274,3 +274,7 @@ button.sg:hover { background: rgba(255, 255, 255, 0.08); }
 /* toolbar popup (browsers without a side panel, e.g. Arc) */
 html.popup { width: 440px; height: 590px; overflow-y: auto; }
 html.popup body { margin: 0; }
+
+/* docked on the x.com page (iframe) */
+html.embed, html.embed body { height: 100%; }
+html.embed body { overflow-y: auto; }

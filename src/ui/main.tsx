@@ -1,3 +1,4 @@
+if (location.search.includes("embed=1")) document.documentElement.classList.add("embed");
 if (location.search.includes("popup=1")) document.documentElement.classList.add("popup");
 import { render } from "preact";
 import { App } from "./App";

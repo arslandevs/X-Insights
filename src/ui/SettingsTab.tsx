@@ -19,6 +19,10 @@ export function SettingsTab({ core, active, tweetsForCsv, now }: { core: Core; a
   const [feedInput, setFeedInput] = useState("");
   const [msg, setMsg] = useState("");
   const bf = useBackfill();
+  const [dock, setDock] = useState(true);
+  useEffect(() => {
+    chrome.storage.local.get("xi-dock-off").then((r) => setDock(!r["xi-dock-off"])).catch(() => {});
+  }, []);
   const [known, setKnown] = useState<UserRow[]>([]);
   useEffect(() => {
     void allUsers().then(setKnown);
@@ -86,6 +90,15 @@ export function SettingsTab({ core, active, tweetsForCsv, now }: { core: Core; a
           </datalist>
         </label>
         <div class="muted small">Using {core.tz}. "local" follows this computer.</div>
+      </div>
+
+      <h2>On x.com</h2>
+      <div class="card">
+        <label class="row">
+          <span>Show the X Insights button on x.com pages</span>
+          <input type="checkbox" checked={dock} onChange={(e) => { const on = (e.currentTarget as HTMLInputElement).checked; setDock(on); void chrome.storage.local.set({ "xi-dock-off": !on }); }} />
+        </label>
+        <div class="muted small">A small tab on the right edge opens the panel over the page. Reload the x.com tab after changing this.</div>
       </div>
 
       <h2>Feed accounts</h2>

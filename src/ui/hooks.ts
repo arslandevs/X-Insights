@@ -60,7 +60,17 @@ export function useActiveTab(): ActiveTab {
       setTab({ tabId: t?.id ?? null, url, isX: isXUrl(url), handle: handleFromUrl(url) });
     };
     // The last focused *normal* window, so this also works when the panel itself is open in a popup window (browsers without a side panel).
+    // Docked on the x.com page: this frame belongs to exactly one tab, so follow that tab.
+    const embedded = location.search.includes("embed=1");
+    let ownTab: number | null = null;
     const refresh = () =>
+      embedded
+        ? (ownTab === null ? (chrome.runtime.sendMessage({ type: "whoami" }) as Promise<{ tabId: number | null }>).then((r) => (ownTab = r?.tabId ?? null)) : Promise.resolve(ownTab))
+            .then((id) => (id === null ? undefined : chrome.tabs.get(id)))
+            .then(apply)
+            .catch(() => {})
+        : refreshWindow();
+    const refreshWindow = () =>
       chrome.windows
         .getLastFocused({ windowTypes: ["normal"] })
         .then((w) => chrome.tabs.query({ active: true, windowId: w.id }))
@@ -68,7 +78,7 @@ export function useActiveTab(): ActiveTab {
         .catch(() => chrome.tabs.query({ active: true, currentWindow: true }).then((r) => apply(r[0])).catch(() => {}));
     void refresh();
     const onUpdated = (_id: number, info: chrome.tabs.OnUpdatedInfo, t: chrome.tabs.Tab) => {
-      if (info.url || info.status === "complete") if (t.active) void refresh();
+      if (info.url || info.status === "complete") if (embedded ? t.id === ownTab : t.active) void refresh();
     };
     chrome.tabs.onActivated.addListener(refresh);
     chrome.tabs.onUpdated.addListener(onUpdated);
