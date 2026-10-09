@@ -6,24 +6,33 @@ import { pageAction, type XAction } from "./xaction";
 
 const channel = new BroadcastChannel("xi");
 
-chrome.sidePanel?.setPanelBehavior({ openPanelOnActionClick: true }).catch(() => {});
-
-// Browsers without the side panel API (Arc, for one): open the same panel in a small window instead.
-if (!chrome.sidePanel) {
-  let panelWindow: number | undefined;
-  chrome.action.onClicked.addListener(async () => {
-    if (panelWindow !== undefined) {
-      try {
-        await chrome.windows.update(panelWindow, { focused: true });
-        return;
-      } catch {
-        panelWindow = undefined; // the user closed it
-      }
-    }
-    const w = await chrome.windows.create({ url: chrome.runtime.getURL("sidepanel.html"), type: "popup", width: 440, height: 900 });
-    panelWindow = w?.id;
+// Toolbar click: try the side panel; if no panel answers (browsers such as Arc expose the API but show nothing), open the same
+// panel in a small window instead.
+let panelWindow: number | undefined;
+const panelAlive = (ms: number) =>
+  new Promise<boolean>((resolve) => {
+    const ch = new BroadcastChannel("xi");
+    const done = (v: boolean) => {
+      clearTimeout(timer);
+      ch.close();
+      resolve(v);
+    };
+    const timer = setTimeout(() => done(false), ms);
+    ch.onmessage = (e) => e.data?.type === "panel-alive" && done(true);
+    ch.postMessage({ type: "panel-ping" });
   });
-}
+
+chrome.action.onClicked.addListener(async (tab) => {
+  // Must be called straight away: opening a side panel needs the click's user gesture.
+  const opened = typeof chrome.sidePanel?.open === "function" && tab.windowId !== undefined ? chrome.sidePanel.open({ windowId: tab.windowId }).catch(() => {}) : Promise.resolve();
+  await opened;
+  if (await panelAlive(1200)) {
+    if (panelWindow !== undefined) await chrome.windows.update(panelWindow, { focused: true }).catch(() => (panelWindow = undefined));
+    return;
+  }
+  const w = await chrome.windows.create({ url: chrome.runtime.getURL("sidepanel.html"), type: "popup", width: 440, height: 900 });
+  panelWindow = w?.id;
+});
 
 chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
   if (!msg || typeof msg !== "object") return;

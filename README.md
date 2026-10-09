@@ -21,11 +21,11 @@ Ranges: Today, 3, 7, 30, 90 days, 6 months, 1 year, all captured. Everything is 
 
 ## Install in another browser (Chrome, Brave, Arc, Edge...)
 
-1. Download `x-insights-v0.3.1.zip` from the [latest release](https://github.com/arslandevs/X-Insights/releases/latest) and unzip it somewhere permanent (the browser reads from that folder, so do not delete it).
+1. Download `x-insights-v0.3.2.zip` from the [latest release](https://github.com/arslandevs/X-Insights/releases/latest) and unzip it somewhere permanent (the browser reads from that folder, so do not delete it).
 2. Open `chrome://extensions`, turn on **Developer mode**, click **Load unpacked**, pick the unzipped folder.
 3. Reload any open x.com tab.
 
-**Arc** has no side panel, so there the toolbar icon opens the panel in a small window instead. It still follows the tab you last used.
+**Arc** does not show Chrome's side panel, so there the toolbar icon opens the panel in a small window instead (the extension checks whether a panel really appeared). It still follows the tab you last used.
 
 Data is stored per browser. To move it: **Settings → Export JSON** in the old browser, **Import JSON** in the new one.
 
