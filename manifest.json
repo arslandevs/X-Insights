@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "X Insights",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Personal analytics for X profiles, built only from responses your own browser already loaded. Local only.",
   "minimum_chrome_version": "114",
   "permissions": [

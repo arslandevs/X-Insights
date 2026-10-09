@@ -59,10 +59,16 @@ export function useActiveTab(): ActiveTab {
       const url = t?.url ?? null;
       setTab({ tabId: t?.id ?? null, url, isX: isXUrl(url), handle: handleFromUrl(url) });
     };
-    const refresh = () => chrome.tabs.query({ active: true, currentWindow: true }).then((r) => apply(r[0])).catch(() => {});
+    // The last focused *normal* window, so this also works when the panel itself is open in a popup window (browsers without a side panel).
+    const refresh = () =>
+      chrome.windows
+        .getLastFocused({ windowTypes: ["normal"] })
+        .then((w) => chrome.tabs.query({ active: true, windowId: w.id }))
+        .then((r) => apply(r[0]))
+        .catch(() => chrome.tabs.query({ active: true, currentWindow: true }).then((r) => apply(r[0])).catch(() => {}));
     void refresh();
     const onUpdated = (_id: number, info: chrome.tabs.OnUpdatedInfo, t: chrome.tabs.Tab) => {
-      if (info.url || info.status === "complete") if (t.active) apply(t);
+      if (info.url || info.status === "complete") if (t.active) void refresh();
     };
     chrome.tabs.onActivated.addListener(refresh);
     chrome.tabs.onUpdated.addListener(onUpdated);

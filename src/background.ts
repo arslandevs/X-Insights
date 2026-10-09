@@ -8,6 +8,23 @@ const channel = new BroadcastChannel("xi");
 
 chrome.sidePanel?.setPanelBehavior({ openPanelOnActionClick: true }).catch(() => {});
 
+// Browsers without the side panel API (Arc, for one): open the same panel in a small window instead.
+if (!chrome.sidePanel) {
+  let panelWindow: number | undefined;
+  chrome.action.onClicked.addListener(async () => {
+    if (panelWindow !== undefined) {
+      try {
+        await chrome.windows.update(panelWindow, { focused: true });
+        return;
+      } catch {
+        panelWindow = undefined; // the user closed it
+      }
+    }
+    const w = await chrome.windows.create({ url: chrome.runtime.getURL("sidepanel.html"), type: "popup", width: 440, height: 900 });
+    panelWindow = w?.id;
+  });
+}
+
 chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
   if (!msg || typeof msg !== "object") return;
   if (msg.type === "capture" && typeof msg.url === "string" && typeof msg.text === "string") {
