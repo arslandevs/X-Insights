@@ -105,9 +105,12 @@ export async function counts() {
   return { users, tweets, interactions };
 }
 
+/** Deletes captured data. Your settings (feed accounts, handle, timezone) are kept: they are yours, not captured. */
 export async function clearAll() {
   const db = await getDB();
+  const keep = await db.get("meta", "settings");
   await Promise.all(["users", "tweets", "interactions", "meta"].map((s) => db.clear(s as "users")));
+  if (keep) await db.put("meta", keep);
 }
 
 // ---- reads used by the UI --------------------------------------------------------------------

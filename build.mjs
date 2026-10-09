@@ -16,6 +16,7 @@ const copyStatic = () => {
   cpSync("manifest.json", "dist/manifest.json");
   cpSync("src/ui/sidepanel.html", "dist/sidepanel.html");
   cpSync("src/ui/sidepanel.css", "dist/sidepanel.css");
+  cpSync("icons", "dist/icons", { recursive: true });
 };
 
 if (watch) {

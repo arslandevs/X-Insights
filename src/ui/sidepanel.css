@@ -216,7 +216,7 @@ td.hl { color: var(--accent); font-weight: 600; }
 .strip-i { display: inline-flex; align-items: center; gap: 4px; font-size: 13px; }
 .strip-i b { color: var(--text); }
 select.range.active { border-color: var(--accent); color: var(--accent); }
-.toolbar select.range { max-width: 104px; }
+.toolbar select.range { max-width: 132px; }
 .kind.k-reply { background: #0f3b2e; color: #4be0a8; }
 .kind.k-quote { background: #3a2c08; color: #ffd24d; }
 .kind.k-retweet { background: #2a2f34; color: #9aa7b2; }
@@ -255,3 +255,18 @@ button.sg:hover { background: rgba(255, 255, 255, 0.08); }
 .sg-t { display: flex; flex-direction: column; min-width: 0; line-height: 1.25; }
 .fa.like.on { color: #f91880; }
 .fa.rt.on { color: #00ba7c; }
+
+/* v0.6 outliers */
+.scatter { height: auto; }
+.scatter .med { stroke: #7f8b96; stroke-width: 1; stroke-dasharray: 4 4; }
+.dot-p { cursor: pointer; transition: opacity 0.1s; }
+.dot-p:hover { stroke: #fff; stroke-width: 1.5; opacity: 1; }
+.axis-l { display: flex; justify-content: space-between; color: var(--muted); font-size: 11px; margin-top: 2px; }
+.chips .chip b { color: var(--text); }
+.lift { position: relative; display: grid; grid-template-columns: 96px 1fr; align-items: center; gap: 6px; margin-bottom: 6px; }
+.lift-l { font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lift-b { min-width: 0; }
+.lift .pb { height: 13px; }
+.lift .pb span { line-height: 13px; font-size: 10px; }
+.lift-base { display: none; }
+.tabs button { font-size: 12.5px; padding: 8px 4px; }

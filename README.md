@@ -4,20 +4,22 @@ A personal Chrome extension (Manifest V3) that shows analytics for any X profile
 
 Build spec: the full plan this follows is the "X Insights: Personal Chrome Extension (Build Plan)" you were given. Status below.
 
-## Status
+## What it does
 
-All six milestones are built. It has been checked against real captured payloads in a dev harness, but **not yet inside a real loaded extension**: that is the next test.
+A side panel that follows the profile in your active x.com tab.
 
-| Milestone | State |
+| Tab | What you get |
 | --- | --- |
-| M1 Capture and store | Done |
-| M2 Profile header, coverage banner, Tweets table | Built |
-| M3 Cadence (heatmaps, streak, busiest day/hour, originals vs replies) | Built |
-| M4 Engagement (impressions, rate, per-metric charts, best/worst, media vs text) | Built |
-| M5 People and interactions (grid, hover card, "You and @handle") | Built |
-| M6 Polish (Feed, Settings, JSON/CSV export, import, clear data, backfill) | Built |
+| Overview | Totals strip (impressions, likes, reposts, replies, quotes, bookmarks), posting cadence (streak, best day and hour, heatmaps), interactive charts, best and worst posts (by views, engagement rate or interactions), with-vs-without media comparison |
+| Outliers | Scatter of views against response (rate, likes, replies...) with your median post marked. Highlights **Stars** (much more views and response), **Reach only** (lots of views, little response) and **Hidden gems** (few views, much more response). A "What works" chart compares replies, quotes, photo, video, link and text-only posts with your typical post |
+| Tweets | Every captured post in the range, one line each, icon columns, hover for the post as it looks on X, search and type/media filters |
+| People | Who interacts with you, from notifications and replies |
+| Feed | Saved accounts or everything captured, with full text and media, filters, and Like / Repost buttons that work from the panel |
+| Settings | Your handle, timezone, saved feed accounts (searchable), capture health, export/import JSON, CSV, clear data, "Load older" backfill |
 
-## Try it
+Ranges: Today, 3, 7, 30, 90 days, 6 months, 1 year, all captured. Everything is stored locally in IndexedDB.
+
+## Install (load unpacked)
 
 ```bash
 npm install
@@ -77,3 +79,13 @@ I checked real responses from a signed-in session before writing the parsers:
 
 - Only data your browser has loaded is available; a new account needs a scroll or two. The coverage banner makes partial data explicit.
 - X changes its internal responses without notice. Fixtures plus tolerant parsers keep repairs small: re-capture a fixture and fix.
+
+## Likes and reposts from the panel
+
+The Feed's Like and Repost buttons send the same request the heart and repost buttons on x.com send, from inside an open x.com tab using your own session. No API key, nothing leaves your browser except that request to x.com. X refuses to create posts this way ("looks like it might be automated"), so **Reply and Quote open X's compose screen in a new tab** with the text prefilled. Use likes and reposts by hand, one click at a time; this is not meant for bulk use.
+
+## Privacy
+
+- Passive capture: only responses your own browser already loaded from x.com.
+- All data stays in this browser (IndexedDB and chrome.storage.local). Nothing is sent anywhere else.
+- Feed accounts and other settings survive "Clear data".

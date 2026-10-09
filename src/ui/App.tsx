@@ -5,6 +5,7 @@ import { saveSettings } from "../settings";
 import { clearData, exportCsv, exportJson, importJsonFile } from "./actions";
 import { FilterPicker } from "./FilterPicker";
 import { Feed } from "./Feed";
+import { Outliers } from "./Outliers";
 import { Overview } from "./Overview";
 import { PeopleGrid } from "./PeopleGrid";
 import { CoverageBar } from "./ProfileHeader";
@@ -15,9 +16,10 @@ import { Icon } from "./Icon";
 import { useActiveTab, useLive, useStored } from "./hooks";
 import { loadCore, loadSocial } from "./load";
 
-type Tab = "overview" | "tweets" | "people" | "feed" | "settings";
+type Tab = "overview" | "outliers" | "tweets" | "people" | "feed" | "settings";
 const TABS: { key: Tab; label: string }[] = [
   { key: "overview", label: "Overview" },
+  { key: "outliers", label: "Outliers" },
   { key: "tweets", label: "Tweets" },
   { key: "people", label: "People" },
   { key: "feed", label: "Feed" },
@@ -104,6 +106,12 @@ export function App() {
       </nav>
       <main>
         {tab === "overview" && <Overview core={core} range={range} now={now} active={active} untilMs={untilMs} />}
+        {tab === "outliers" && (
+          <>
+            <CoverageBar cov={coverage(core.tweets, range, core.tz, now)} handle={core.handle} tz={core.tz} active={active} untilMs={untilMs} />
+            <Outliers core={core} tweets={rangeTweets} />
+          </>
+        )}
         {tab === "tweets" && (
           <>
             <div class="toolbar">
